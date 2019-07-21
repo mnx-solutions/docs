@@ -5,3 +5,9 @@ theme:
     primary: 'indigo'
     accent: 'indigo'
   logo: 'images/logo.png'
+
+nav:
+    - Home: index.md
+    - CloudAPI: /cloudapi/index.md
+    - Security: https://mnx.io/security
+
