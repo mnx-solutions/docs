@@ -8,6 +8,6 @@ theme:
 
 nav:
     - Home: index.md
-    - CloudAPI: /cloudapi/index.md
+    - CloudAPI: /cloudapi/index.html
     - Security: https://mnx.io/security
 
