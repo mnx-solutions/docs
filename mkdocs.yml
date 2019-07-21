@@ -11,3 +11,8 @@ nav:
     - CloudAPI: /cloudapi/index.html
     - Security: https://mnx.io/security
 
+
+markdown_extensions:
+    - toc:
+        permalink: True
+        separator: "_"

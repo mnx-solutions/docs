@@ -1,5 +1,5 @@
 ---
-title: Joyent CloudAPI
+title: MNX.io CloudAPI
 mediaroot: ./media
 apisections: Account, Keys, Config, Datacenters, Images, Packages, Instances, FirewallRules, Networks, Nics, Users, Roles, Policies, Services, User SSH Keys, Role Tags, Fabrics, Migrations
 markdown2extras: tables, code-friendly
@@ -34,7 +34,7 @@ documentation does not cover. For more information about Triton visit
 [Joyent Triton](https://www.joyent.com/private-cloud).
 
 
-## Conventions
+### Conventions
 
 Any content formatted as follows is a command-line example that you can run from
 a shell:
@@ -48,9 +48,9 @@ All other examples and information are formatted like so:
 
 
 
-# Introduction to CloudAPI
+## Introduction to CloudAPI
 
-## What is CloudAPI?
+### What is CloudAPI?
 
 CloudAPI is one of the two public APIs you can use to interact with Triton.
 Using CloudAPI, you can:
@@ -70,7 +70,7 @@ clients can communicate with.  Refer to Joyent's
 [Docker documentation](https://apidocs.joyent.com/docker) for more information.
 
 
-## How do I access CloudAPI?
+### How do I access CloudAPI?
 
 CloudAPI is available as a REST API, and you can access it using:
 
@@ -93,7 +93,7 @@ functionality.
 
 
 
-# Getting Started
+## Getting Started
 
 If you choose to use node-triton or node-smartdc, be aware that they both
 require Node.js.
@@ -125,7 +125,7 @@ this switch if you'd rather the tools be installed in your home hierarchy, but
 you'll need to set your PATH appropriately.
 
 
-## Generate an SSH key
+### Generate an SSH key
 
 Both CLIs require an SSH key to communicate with CloudAPI, as well as logging-in
 to many instances.
@@ -142,7 +142,7 @@ for a file called ~/.ssh/id_rsa. Before running the above command, ensure that
 consequences.
 
 
-## Set Up your CLI
+### Set Up your CLI
 
 You need to set the following environment variables information in order to
 interact with CloudAPI using either node-triton or node-smartdc:
@@ -170,7 +170,7 @@ where you replace `~/.ssh/id_rsa.pub` with the path to the public key you want
 to use for signing requests.
 
 
-## Working with the CLI
+### Working with the CLI
 
 For a complete list of CloudAPI CLI commands available, please see
 [Appendix C: CloudAPI CLI Commands](#appendix-c-cloudapi-cli-commands).
@@ -211,7 +211,7 @@ this document assume that these variables have been set:
 --url<br/>-u     | URL of the CloudAPI endpoint | SDC_URL
 
 
-## Provision a new instance
+### Provision a new instance
 
 To provision a new instance, you first need to get the `id`s for the image and
 package you want to use as the base for your instance.
@@ -311,7 +311,7 @@ concepts:
 
 
 <a name="image-description"></a>
-### Images
+#### Images
 
 By default, SmartOS images should be available to your for use.  Your Triton
 cloud may have other images available as well, such as Linux or Windows images.
@@ -331,7 +331,7 @@ For example:
 
 
 <a name="packages-description"></a>
-### Packages
+#### Packages
 
 You can list packages available in your cloud with:
 
@@ -352,7 +352,7 @@ be available, how much RAM, disk and swap, and so forth).  Packages are provided
 so that you do not need to select individual settings, such as RAM or disk size.
 
 
-## Managing SSH keys
+### Managing SSH keys
 
 For instances which don't have a `brand` of `kvm` or `bhyve` (see
 `triton instance list -o id,brand` or `sdc-listmachines`), you can manage the
@@ -380,14 +380,14 @@ Hardware virtual machines are static, and whatever keys were in your account at
 instance creation time are used, provided the OS inside KVM is a \*nix.
 
 
-## Cleaning up
+### Cleaning up
 
 After going through this `Getting Started` section, you should now have at least
 one SSH key and one instance.  The rest of the commands
 assume you have [json](https://www.npmjs.org/package/json) installed.
 
 
-### Deleting Machines
+#### Deleting Machines
 
 To clean up an instance, you can use either:
 
@@ -402,7 +402,7 @@ For example:
     $ triton instance delete 9205af5b
     Delete (async) instance 9205af5b (9205af5b-f2c0-ef07-e1f3-94bf1ff8fb93)
 
-### Deleting keys
+#### Deleting keys
 
 Finally, you probably have one or two SSH keys uploaded to Triton after going
 through the guide, so to delete the one we setup:
@@ -416,7 +416,7 @@ or
 
 
 
-# RBAC: Users, Roles & Policies
+## RBAC: Users, Roles & Policies
 
 Starting at version 7.2.0, CloudAPI supports Role Based Access Control (RBAC),
 which means that [accounts](#account) can have multiple users and roles
@@ -489,7 +489,7 @@ easily reusing existing policies for one or more roles, allowing fine-grained
 definition of each role's abilities.
 
 
-## Rules definition for access control
+### Rules definition for access control
 
 As mentioned earlier, the policies' rules use
 [Aperture Policy Language](https://github.com/joyent/node-aperture#policy-language),
@@ -550,7 +550,7 @@ For more details on how Access Control works for both CloudAPI and Manta,
 please refer to [Role Based Access Control](https://docs.joyent.com/jpc/rbac/)
 documentation.
 
-### An important note about RBAC and certain reads after writes
+#### An important note about RBAC and certain reads after writes
 
 CloudAPI uses replication and caching behind the scenes for user, role and
 policy data. This implies that API reads after a write on these particular
@@ -572,7 +572,7 @@ have eventual consistency, not read-after-write.
 
 
 
-# API Introduction
+## API Introduction
 
 CloudAPI exposes a REST API over HTTPS.  You can work with the REST API by
 either calling it directly via tooling you already know about (such as curl, et
@@ -593,7 +593,7 @@ The rest of this document will show all APIs in terms of both the raw HTTP
 specification, the CLI commands, and sometimes the node-smartdc SDK.
 
 
-## Issuing Requests
+### Issuing Requests
 
 All HTTP calls to CloudAPI must be made over TLS, and requests must carry at
 least two headers (in addition to standard HTTP headers): `Authorization` and
@@ -601,7 +601,7 @@ least two headers (in addition to standard HTTP headers): `Authorization` and
 any requests requiring content must be sent in an acceptable scheme to
 CloudAPI.  Details are also below.
 
-### Content-Type
+#### Content-Type
 
 For requests requiring content, you can send parameters encoded with
 `application/json`, `application/x-www-form-urlencoded` or
@@ -638,7 +638,7 @@ JSON in the body:
 
     {"name":"rsa","key":"..."}
 
-### Authorization
+#### Authorization
 
 All API calls to CloudAPI require an Authorization header, which supports
 multiple ["schemes"](http://tools.ietf.org/html/rfc2617).  Currently CloudAPI
@@ -668,7 +668,7 @@ in the npm `http-signature` module, which you can install with:
 
     npm install http-signature
 
-### Using cURL with CloudAPI
+#### Using cURL with CloudAPI
 
 Since [cURL](http://curl.haxx.se/) is commonly used to script requests to web
 services, here's a simple Bash function you can use to wrap cURL when
@@ -697,7 +697,7 @@ With that function, you could just do:
     $ cloudapi /my/machines
 
 
-## CloudAPI HTTP Responses
+### CloudAPI HTTP Responses
 
 CloudAPI returns all response objects as `application/json` encoded HTTP bodies.
 In addition to the JSON body, all responses have the following headers:
@@ -717,7 +717,7 @@ Content-Length | How much content, in bytes
 Content-Type   | Formatting of the response (almost always application/json)
 Content-MD5    | An MD5 checksum of the response; you should check this
 
-### HTTP Status Codes
+#### HTTP Status Codes
 
 Your client should check for each of the following status codes from any API
 request:
@@ -738,7 +738,7 @@ request:
 500      | Internal Error  | An unexpected error occurred; see returned message for more details.
 503      | Service Unavailable      | Either there's no capacity in this datacenter, or it's in a maintenance window
 
-### Error Responses
+#### Error Responses
 
 In the event of an error, CloudAPI will return a standard JSON error response
 object in the body with the scheme:
@@ -771,7 +771,7 @@ Clients are expected to check HTTP status code first, and if it's in the 4xx
 range, they can leverage the codes above.
 
 
-# API Versions
+## API Versions
 
 A CloudAPI endpoint has two relevant version values: the code version and the
 "API version". The former includes the full `major.minor.patch` version value
@@ -805,7 +805,7 @@ node-smartdc use `~8||~7` by default, and users can restrict the API
 version via the `SDC_API_VERSION=RANGE` environment variable or the
 `--api-version=RANGE` option to each command.
 
-# Ping
+## Ping
 
 The set of supported *API versions* is given in the ping endpoint:
 
@@ -837,31 +837,31 @@ The set of supported *API versions* is given in the ping endpoint:
 
 Note that a `Triton-Datacenter-Name` response header was added in 9.2.0.
 
-# Versions
+## Versions
 
 The section describes API changes in CloudAPI versions.
 
-## 9.6.0
+### 9.6.0
 - Added support for user-driven machine [Migrations](#migrations),
   allowing the movement of machines between servers.
 
-## 9.5.0
+### 9.5.0
 - Remove Cloud Analytics endpoints. Cloud Analytics has been removed from
   Triton. See [TRITON-884](https://smartos.org/bugview/TRITON-884) for details.
 - [CreateMachine](#CreateMachine)'s `affinity` rules now work with concurrent
   provisions.
 
-## 9.4.3
+### 9.4.3
 - [ListPackages](#ListPackages) and [GetPackage](#GetPackage) include the
   `flexible_disk` and `disks` attributes if they exist
 
-## 9.4.2
+### 9.4.2
 - The disks.\*.uuid parameter was renamed to disks.\*.id. This change impacts
   [CreateMachine](#CreateMachine), [GetMachine](#GetMachine), and
   [ListMachines](#ListMachines). Backwards incompatible with versions 9.4.0
   and 9.4.1.
 
-## 9.4.1
+### 9.4.1
 - Added support for [CreateMachineDisk](#CreateMachineDisk),
   [ResizeMachineDisk](#ResizeMachineDisk) and
   [DeleteMachineDisk](#DeleteMachineDisk) for bhyve VMs; this only applies to
@@ -869,20 +869,20 @@ The section describes API changes in CloudAPI versions.
   [GetMachineDisk](#GetMachineDisk) and [ListMachineDisks](#ListMachineDisks)
   are also provided.
 
-## 9.4.0
+### 9.4.0
 - [CreateMachine](#CreateMachine) may pass disk quantity and size for bhyve
   instances. [GetMachine](#GetMachine) and [ListMachines](#ListMachines)
   returns information about these disks. [GetMachineSnapshot](#GetMachineSnapshot)
   and [ListMachineSnapshots](#ListMachineSnapshots) includes snapshot size.
 
-## 9.2.0
+### 9.2.0
 
 - Added new ImportImageFromDatacenter API method to allow an image to be copied
   to another datacenter in the same cloud.
 - Added a `Triton-Datacenter-Name` response header to [Ping](#Ping) and
   [ListDatacenters](#ListDatacenters) responses.
 
-## 9.1.0
+### 9.1.0
 
 - Added [Clone Image](#CloneImage). This can be used to create a your own copy
   of an image owned by another account that has been shared with you (via
@@ -894,7 +894,7 @@ The section describes API changes in CloudAPI versions.
   `triton create --allow-shared-images` does). Older versions of the
   CreateMachine interface will allow the provisioning of shared images.
 
-## 9.0.0
+### 9.0.0
 
 - New object-based format for Roles: the "members" and "policies" properties
   are now arrays of objects describing their values, rather than arrays of
@@ -902,35 +902,35 @@ The section describes API changes in CloudAPI versions.
   "default" boolean property on the objects. You can still elect to use the old
   interface by using a lower `Accept-Version` than `9.0.0`.
 
-## 8.11.0
+### 8.11.0
 
 - Added a new API method to the plugin interface: modifyProvisionNetworks. This
   can be used to modify network arguments sent in the vmapi provision call.
 
-## 8.10.0
+### 8.10.0
 
 - GetImage now includes information about the brand requirements in the
   `requirements.brand` member of the returned JSON.
 
-## 8.9.0
+### 8.9.0
 
 - The plugin interface has changed. preProvision/postProvision hooks have been
   replaced with allowProvision/postProvision and an expanded API. This is a
   change invisible to CloudAPI REST consumers.
 
-## 8.8.0
+### 8.8.0
 
 - CreateMachine now takes brand from the package's `brand` parameter if brand is
   not specified by the image, and ensures that package and image brand
   requirements do not conflict.
 - Fixed some bugs in the `brand` handling for packages.
 
-## 8.7.0
+### 8.7.0
 
 - CreateMachine no longer accepts the `brand` field for specifying the brand
   of the instance to create.
 
-## 8.6.0
+### 8.6.0
 
 - CreateMachine now accepts the `brand` field for specifying the brand of the
   instance to create. This is currently only useful when provisioning a
@@ -940,7 +940,7 @@ The section describes API changes in CloudAPI versions.
   stop both [DeleteMachine](#DeleteMachine) and SDC Docker from destroying an
   instance. This remains true until that attribute is set to false.
 
-## 8.5.0
+### 8.5.0
 
 - CreateMachine and AddNic now accept specifying a [network
   object](#network-objects) instead of just a network UUID. The network object
@@ -949,13 +949,13 @@ The section describes API changes in CloudAPI versions.
   It's worth noting that it's still possible to pass in just the UUID of a
   network, however you cannot mix the new and old formats in the same request.
 
-## 8.4.0
+### 8.4.0
 
 - This version adds support for the following new endpoints:
   [ListNetworkIPs](#ListNetworkIPs), [GetNetworkIP](#GetNetworkIP),
   and [UpdateNetworkIP](#UpdateNetworkIP).
 
-## 8.3.0
+### 8.3.0
 
 - CreateMachine supports a new `affinity` field for specifying affinity rules.
   Affinity rules (inspired by Docker Swarm affinity filters) allow a more
@@ -965,14 +965,14 @@ The section describes API changes in CloudAPI versions.
   This CloudAPI feature is comparable to [Triton's Docker placement affinity
   rules](https://apidocs.joyent.com/docker/features/placement).
 
-## 8.2.1
+### 8.2.1
 
 - GetMachine works with machines that do not have a package or a network. Such
   machines cannot be created through CloudAPI, so this isn't applicable to most
   people unless they have an operator do this for them. ListMachines no longer
   breaks for such machines either.
 
-## 8.2.0
+### 8.2.0
 
 - This version adds support for {{shortId}} tags in the 'name' parameter when
   creating a machine using [CreateMachine](#CreateMachine) machine. Any
@@ -980,13 +980,13 @@ The section describes API changes in CloudAPI versions.
   version (first 8 characters) of the machine's id.
 
 
-## 8.1.1
+### 8.1.1
 
 - It's now possible to query packages using wildcards. See the
 [ListPackages](#ListPackages) section.
 
 
-## 8.1.0
+### 8.1.0
 
 - This version should have no visible API changes, but updates a lot of
   libraries that Cloudapi depends on, as well as the nodejs major version.
@@ -994,7 +994,7 @@ The section describes API changes in CloudAPI versions.
   crept through.
 
 
-## 8.0.0
+### 8.0.0
 
 - Instance/machine objects (from GetMachine, ListMachines) now has a `brand`
   attribute, which is more granular than the existing `type` (now deprecated).
@@ -1015,13 +1015,13 @@ The section describes API changes in CloudAPI versions.
   since it only had meaning in 6.5.
 
 
-## 7.3.0
+### 7.3.0
 
 - Network fabrics (software-defined networking) support.
   This allows the creation of virtual LANs and layer-three networks.
 
 
-## 7.2.0
+### 7.2.0
 
 - RBAC v1 has been made available on the CloudAPI interface. Accounts can create
   users, rules can be created and combined to make policies, policies and users
@@ -1029,7 +1029,7 @@ The section describes API changes in CloudAPI versions.
   CloudAPI resources.
 
 
-## 7.1.0
+### 7.1.0
 
 - Starting with version 7.1.0, customer image management is made available,
   allowing [Machine Creation from Images](#CreateImageFromMachine),
@@ -1049,27 +1049,27 @@ The section describes API changes in CloudAPI versions.
   rules).
 
 
-## 7.0.0
+### 7.0.0
 
 - HTTP signature auth.
 
 
-# Account
+## Account
 
 You can obtain your account details and update them through CloudAPI, although
 `login` cannot be changed, and `password` can not be retrieved.
 
 
-## GetAccount (GET /:login)
+### GetAccount (GET /:login)
 
 Retrieves your account details. Instead of providing your login name, you can
 also provide 'my' (i.e. GET /my).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Account object:
 
@@ -1091,7 +1091,7 @@ created     | ISO8601 date | When this account was created
 updated     | ISO8601 date | When this account's details was last updated
 triton_cns_enabled | Boolean | `true` if Triton CNS is enabled for account
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1099,7 +1099,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton account get
 
@@ -1107,7 +1107,7 @@ or
 
     $ sdc-getaccount
 
-### Example Request
+#### Example Request
 
     GET /my HTTP/1.1
     authorization: Signature keyId="..."
@@ -1115,7 +1115,7 @@ or
     accept-version: ~8
     host: api.example.com
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1146,11 +1146,11 @@ or
 
 
 
-## UpdateAccount (POST /:login)
+### UpdateAccount (POST /:login)
 
 Update your account details with the given parameters.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -1166,7 +1166,7 @@ country     | String   | ...
 phone       | String   | ...
 triton_cns_enabled | Boolean | Enable or disable the Triton CNS
 
-### Returns
+#### Returns
 
 Account object:
 
@@ -1188,7 +1188,7 @@ created     | ISO8601 date | When this account was created
 updated     | ISO8601 date | When this account's details was last updated
 triton_cns_enabled | Boolean | `true` if Triton CNS is enabled for account
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1196,7 +1196,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton account update postalCode=12345 phone='1 (234) 567 890'
 
@@ -1204,7 +1204,7 @@ or
 
     $ sdc-updateaccount --postal-code=12345 --phone='1 (234) 567 890'
 
-### Example Request
+#### Example Request
 
     POST /my HTTP/1.1
     authorization: Signature keyId="...
@@ -1218,7 +1218,7 @@ or
 
     postal-code=12345&phone=1%20(234)%20567%20890
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1251,7 +1251,7 @@ or
 
 
 
-# Keys
+## Keys
 
 This part of the API is the means by which you operate on your SSH/signing keys.
 These keys are needed in order to login to instances over SSH, as well as signing
@@ -1279,15 +1279,15 @@ use `fingerprint` when possible, since the `name` attribute does not have any
 uniqueness constraints.
 
 
-## ListKeys (GET /:login/keys)
+### ListKeys (GET /:login/keys)
 
 Lists all public keys we have on record for the specified account.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Array of key objects.  Each key object has the following fields:
 
@@ -1306,7 +1306,7 @@ Possible `multifactor` values:
 pin         | Input of a PIN or password is required for key use
 touch       | Touch input (not authenticated -- i.e. not a fingerprint) is required for key use
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1314,7 +1314,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton key list
 
@@ -1322,7 +1322,7 @@ ResourceNotFound | If `:login` does not exist
 
     $ sdc-listkeys
 
-### Example Request
+#### Example Request
 
     GET /my/keys HTTP/1.1
     Host: api.example.com
@@ -1330,7 +1330,7 @@ ResourceNotFound | If `:login` does not exist
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1356,15 +1356,15 @@ ResourceNotFound | If `:login` does not exist
     ]
 
 
-## GetKey (GET /:login/keys/:key)
+### GetKey (GET /:login/keys/:key)
 
 Retrieves the record for an individual key.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
@@ -1381,7 +1381,7 @@ Possible `multifactor` values:
 pin         | Input of a PIN or password is required for key use
 touch       | Touch input (not authenticated -- i.e. not a fingerprint) is required for key use
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1389,7 +1389,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:key` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton key get barbar
 
@@ -1397,7 +1397,7 @@ or
 
     $ sdc-getkey barbar
 
-### Example Request
+#### Example Request
 
     GET /my/keys/barbar HTTP/1.1
     Authorization: ...
@@ -1405,7 +1405,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1431,11 +1431,11 @@ or
     }
 
 
-## CreateKey (POST /:login/keys)
+### CreateKey (POST /:login/keys)
 
 Uploads a new OpenSSH key to Triton for use in HTTP signing and SSH.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -1443,7 +1443,7 @@ name        | String   | Name for this key (optional)
 key         | String   | OpenSSH formatted public key
 attestation | Array of String | PEM formatted attestation certificates
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -1453,7 +1453,7 @@ key         | String   | OpenSSH formatted public key
 attested    | Boolean  | Indicates if the key has a hardware device attestation
 multifactor | Array[String] | Lists any additional factors required to use (if attested)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1463,7 +1463,7 @@ InvalidArgument  | If name or key is invalid (usually key)
 MissingParameter | If you didn't send a key
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton key add --name=barbardos ~/.ssh/id_rsa.pub
 
@@ -1471,7 +1471,7 @@ or
 
     $ sdc-createkey --name=barbardos ~/.ssh/id_rsa.pub
 
-### Example Request
+#### Example Request
 
     POST /my/keys HTTP/1.1
     Authorization: ...
@@ -1487,7 +1487,7 @@ or
       "key": "ssh-rsa AAA..."
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     Content-Type: application/json
@@ -1511,19 +1511,19 @@ or
     }
 
 
-## DeleteKey (DELETE /:login/keys/:key)
+### DeleteKey (DELETE /:login/keys/:key)
 
 Deletes a single SSH key, by name or fingerprint.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1531,7 +1531,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:key` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton key delete barbados
 
@@ -1539,7 +1539,7 @@ or
 
     $ sdc-deletekey barbados
 
-#### Example Request
+###### Example Request
 
     DELETE /my/keys/barbardos HTTP/1.1
     Host: api.example.com
@@ -1547,7 +1547,7 @@ or
     Api-Version: ~8
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -1564,23 +1564,23 @@ or
 
 
 
-# Users
+## Users
 
 These are users (also known as sub-users); additional users who are authorized
 to use the same account, but are subject to the RBAC system. See the
 [RBAC](#rbac-users-roles-policies) section for more details.
 
 
-## ListUsers (GET /:account/users)
+### ListUsers (GET /:account/users)
 
 Returns a list of an account's user objects.  These have the same format as the
 main [account](#account) object.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Array of user objects.  Each user object has the following fields:
 
@@ -1601,17 +1601,17 @@ phone       | String   | ...
 created     | ISO8601 date | When this user was created
 updated     | ISO8601 date | When this user's details was last updated
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user list
 
-### Example Request
+#### Example Request
 
     GET /my/users HTTP/1.1
     Accept: application/json
@@ -1619,7 +1619,7 @@ ResourceNotFound | If `:account` does not exist
     Api-Version: ~8
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1662,17 +1662,17 @@ ResourceNotFound | If `:account` does not exist
     ]
 
 
-## GetUser (GET /:account/users/:user)
+### GetUser (GET /:account/users/:user)
 
 Get one user for an account.
 
-### Inputs
+#### Inputs
 
 **Field**  | **Type** | **Description**
 ---------- | -------- | ---------------
 membership | Boolean  | When given, the user roles will also be returned
 
-### Returns
+#### Returns
 
 An array of user objects.  Each user object has the following fields:
 
@@ -1695,17 +1695,17 @@ default_roles | Array    | User active role names (only when `membership` option
 created       | ISO8601 date | When this user was created
 updated       | ISO8601 date | When this user's details was last updated
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | When `:account` or `:user` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user get 4fc13ac6-1e7d-cd79-f3d2-96276af0d638
 
-### Example Request
+#### Example Request
 
     GET /my/users/4fc13ac6-1e7d-cd79-f3d2-96276af0d638 HTTP/1.1
     Accept: application/json
@@ -1713,7 +1713,7 @@ ResourceNotFound | When `:account` or `:user` do not exist
     Api-Version: ~8
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1743,11 +1743,11 @@ ResourceNotFound | When `:account` or `:user` do not exist
     }
 
 
-## CreateUser (POST /:account/users)
+### CreateUser (POST /:account/users)
 
 Creates a new user under an account.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -1764,7 +1764,7 @@ state       | String   | ...
 country     | String   | ...
 phone       | String   | ...
 
-### Returns
+#### Returns
 
 User object:
 
@@ -1785,7 +1785,7 @@ phone       | String   | ...
 created     | ISO8601 date | When this user was created
 updated     | ISO8601 date | When this user's details was last updated
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1795,11 +1795,11 @@ InvalidArgument  | If any of the parameters are invalid, e.g. you try to add a l
 MissingParameter | If you didn't send a `login`, `email` or `password`
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user create --login=bob --email=bob@test.joyent.com --password=123secret
 
-### Request:
+#### Request:
 
     POST /my/users HTTP/1.1
     Host: api.example.com
@@ -1817,7 +1817,7 @@ ResourceNotFound | If `:account` does not exist
       "password": "123secret"
     }
 
-### Response:
+#### Response:
 
     HTTP/1.1 201 Created
     Location: /my/users/varth
@@ -1845,7 +1845,7 @@ ResourceNotFound | If `:account` does not exist
 
 
 
-## UpdateUser (POST /:account/users/:id)
+### UpdateUser (POST /:account/users/:id)
 
 Update a user's modifiable properties.
 
@@ -1853,7 +1853,7 @@ Note: Password changes are not allowed using this endpoint; there is an
 additional endpoint ([ChangeUserPassword](ChangeUserPassword)) for password
 changes so it can be selectively allowed/disallowed for users using policies.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -1869,7 +1869,7 @@ state       | String   |
 country     | String   |
 phone       | String   |
 
-### Returns
+#### Returns
 
 User object:
 
@@ -1890,7 +1890,7 @@ phone       | String   | ...
 created     | ISO8601 date | When this user was created
 updated     | ISO8601 date | When this user's details was last updated
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1900,11 +1900,11 @@ InvalidArgument  | If any of the parameters are invalid, e.g. you try to add a `
 MissingParameter | If you didn't send a `login` or `email`
 ResourceNotFound | If `:account` or `:user` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user update b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8 --login=joe
 
-### Request:
+#### Request:
 
     POST /my/users/b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8 HTTP/1.1
     Host: api.example.com
@@ -1920,7 +1920,7 @@ ResourceNotFound | If `:account` or `:user` do not exist
       "login": "joe",
     }
 
-### Response:
+#### Response:
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -1946,19 +1946,19 @@ ResourceNotFound | If `:account` or `:user` do not exist
     }
 
 
-## ChangeUserPassword (POST /:account/users/:user/change_password)
+### ChangeUserPassword (POST /:account/users/:user/change_password)
 
 This is a separate rule for password changes, so different policies can be used
 for an user trying to modify other data, or only their own password.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 password  | String   | ...
 password_confirmation | String | string must match `password`
 
-### Returns
+#### Returns
 
 User object:
 
@@ -1979,7 +1979,7 @@ phone       | String   | ...
 created     | Date (ISO8601) | When this user was created
 updated     | Date (ISO8601) | When this user's details was last updated
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -1989,11 +1989,11 @@ InvalidArgument  | The provided `password` and `password\_confirmation` didn't m
 MissingParameter | Either `password` or `password\_confirmation` parameters are missing
 ResourceNotFound | If `:account` or `:user` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user change-password b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8 --password=foo123bar --password-confirmation=foo123bar
 
-### Example Request
+#### Example Request
 
     POST /my/users/b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8/change_password HTTP/1.1
     Accept: application/json
@@ -2008,7 +2008,7 @@ ResourceNotFound | If `:account` or `:user` do not exist
         "password_confirmation": "foo123bar"
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2034,19 +2034,19 @@ ResourceNotFound | If `:account` or `:user` do not exist
     }
 
 
-## DeleteUser (DELETE /:account/users/:user)
+### DeleteUser (DELETE /:account/users/:user)
 
 Remove a user. They will no longer be able to use this API.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2054,11 +2054,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:account` does not exist or there isn't a user with either the `login` or `id` given as `:user` value
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user delete b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8
 
-#### Example Request
+###### Example Request
 
     DELETE /my/users/b5c9cf06-b7de-4c11-9b66-8ace6cb92ee8 HTTP/1.1
     Host: api.example.com
@@ -2066,7 +2066,7 @@ ResourceNotFound | If `:account` does not exist or there isn't a user with eithe
     Api-Version: ~8
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -2083,21 +2083,21 @@ ResourceNotFound | If `:account` does not exist or there isn't a user with eithe
 
 
 
-# Roles
+## Roles
 
 Roles a sub-users can adopt when attempting to access a resource. See the
 [RBAC](#rbac-users-roles-policies) section for more details.
 
 
-## ListRoles (GET /:account/roles)
+### ListRoles (GET /:account/roles)
 
 Returns an array of account roles.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Array of role objects.  Each role object has the following fields:
 
@@ -2124,17 +2124,17 @@ id        | UUID     | Unique id for this user
 login     | String   | Login name of this user
 default   | Boolean  | If `true`, the user is a default member of the role
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-role list
 
-### Example Request
+#### Example Request
 
     GET /my/roles HTTP/1.1
     Accept: application/json
@@ -2143,7 +2143,7 @@ ResourceNotFound | If `:account` does not exist
     Accept-Version: ~9
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2182,15 +2182,15 @@ ResourceNotFound | If `:account` does not exist
     ]
 
 
-## GetRole (GET /:account/roles/:role)
+### GetRole (GET /:account/roles/:role)
 
 Get an account role (`:role`) by `id` or `name`.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
@@ -2215,17 +2215,17 @@ id        | UUID     | Unique id for this user
 login     | String   | Login name of this user
 default   | Boolean  | If `true`, the user is a default member of the role
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:role` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-role get e53b8fec-e661-4ded-a21e-959c9ba08cb2
 
-### Example Request
+#### Example Request
 
     GET /my/roles/e53b8fec-e661-4ded-a21e-959c9ba08cb2 HTTP/1.1
     Accept: application/json
@@ -2234,7 +2234,7 @@ ResourceNotFound | If `:account` or `:role` do not exist
     Accept-Version: ~9
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2271,11 +2271,11 @@ ResourceNotFound | If `:account` or `:role` do not exist
     }
 
 
-## CreateRole (POST /:account/roles)
+### CreateRole (POST /:account/roles)
 
 Create a new role for your account.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** |**Description**
 --------- | -------- | --------------
@@ -2301,7 +2301,7 @@ id        | UUID     | Unique id for this user (either id or login required)
 login     | String   | Login name of this user (either id or login required)
 default   | Boolean  | If `true`, the user is a default member of the role (Optional)
 
-### Returns
+#### Returns
 
 Account role.
 
@@ -2312,7 +2312,7 @@ name      | String   | The role name
 policies  | Array    | This account's policies which this role obeys (Optional)
 members   | Array    | This account's users this role applies to (Optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2322,7 +2322,7 @@ InvalidArgument  | If member or policies are invalid, e.g. you try to add a non-
 MissingParameter | If you didn't send a `name`
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
 Note that the CLI command uses the older v7.x/v8.x API.
 
@@ -2335,7 +2335,7 @@ JSON are also acceptable formats for `--members`, `--default-members` and
     $ sdc-role create --name=readable --members=bob,fred --default-members=foo --policies=readinstance
     $ sdc-role create --name=readable --members='["bob","fred"]' --default-members=foo --policies=readinstance
 
-### Example Request
+#### Example Request
 
     POST /my/roles HTTP/1.1
     Accept: application/json
@@ -2351,7 +2351,7 @@ JSON are also acceptable formats for `--members`, `--default-members` and
         "policies": [{"name": "readinstance"}]
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     Location: /my/roles/e53b8fec-e661-4ded-a21e-959c9ba08cb2
@@ -2389,11 +2389,11 @@ JSON are also acceptable formats for `--members`, `--default-members` and
     }
 
 
-## UpdateRole (POST /:account/roles/:role)
+### UpdateRole (POST /:account/roles/:role)
 
 Modifies an account role.  Anything but `id` can be modified.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** |**Description**
 --------- | -------- | --------------
@@ -2419,7 +2419,7 @@ id        | UUID     | Unique id for this user (either id or login required)
 login     | String   | Login name of this user (either id or login required)
 default   | Boolean  | If `true`, the user is a default member of the role (Optional)
 
-### Returns
+#### Returns
 
 Account role
 
@@ -2430,7 +2430,7 @@ name      | String   | The role name
 policies  | Array    | This account's policies which this role obeys (Optional)
 members   | Array    | This account's users this role applies to (Optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2440,11 +2440,11 @@ InvalidArgument  | If member or policies are invalid, e.g. you tried to add an n
 MissingParameter | If you didn't send a `name`
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-role update e53b8fec-e661-4ded-a21e-959c9ba08cb2 --members=foo,bar
 
-### Example Request
+#### Example Request
 
     POST /my/roles/e53b8fec-e661-4ded-a21e-959c9ba08cb2 HTTP/1.1
     Accept: application/json
@@ -2461,7 +2461,7 @@ ResourceNotFound | If `:account` does not exist
         ]
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2504,19 +2504,19 @@ ResourceNotFound | If `:account` does not exist
     }
 
 
-## DeleteRole (DELETE /:account/roles/:role)
+### DeleteRole (DELETE /:account/roles/:role)
 
 Remove a role. `:role` must be the role `id` (a UUID).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2524,11 +2524,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:role` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-role delete e53b8fec-e661-4ded-a21e-959c9ba08cb2
 
-#### Example Request
+###### Example Request
 
     DELETE /my/roles/e53b8fec-e661-4ded-a21e-959c9ba08cb2 HTTP/1.1
     Host: api.example.com
@@ -2536,7 +2536,7 @@ ResourceNotFound | If `:account` or `:role` do not exist
     Api-Version: ~8
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -2553,9 +2553,9 @@ ResourceNotFound | If `:account` or `:role` do not exist
 
 
 
-# Role Tags
+## Role Tags
 
-## SetRoleTags (PUT /:resource_path)
+### SetRoleTags (PUT /:resource_path)
 
 Sets the given role tags to the provided resource path. `resource_path`
 can be the path to any of the CloudAPI resources described in this document:
@@ -2571,13 +2571,13 @@ or just for a given instance using
 
     PUT /:account/machines/:instance_id
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 role-tag  | Array    | The list role-tags to be added to this resource
 
-### Returns
+#### Returns
 
 Resource role tags
 
@@ -2586,7 +2586,7 @@ Resource role tags
 name      | String   | Path to the resource
 role-tag  | Array    | The list of role tags assigned to this resource
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2595,7 +2595,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 InvalidArgument  | The provided resource path is not valid
 ResourceNotFound | If `:resource_path` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-chmod -- =read,create /my/machines
 
@@ -2604,7 +2604,7 @@ command line with `sdc-info /:resource_path`. E.g.:
 
     $ sdc-info /my/machines
 
-### Example Request
+#### Example Request
 
     PUT /my/machines HTTP/1.1
     Accept: application/json
@@ -2619,7 +2619,7 @@ command line with `sdc-info /:resource_path`. E.g.:
         "role-tag": ["test-role"]
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2646,17 +2646,17 @@ command line with `sdc-info /:resource_path`. E.g.:
 
 
 
-# Policies
+## Policies
 
-## ListPolicies (GET /:account/policies)
+### ListPolicies (GET /:account/policies)
 
 Retrieves a list of account policies.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Array of policy objects.  Each policy object has the following fields:
 
@@ -2667,17 +2667,17 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences applying to the policy
 description | String   | A description for this policy
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` does not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-policy list
 
-### Example Request
+#### Example Request
 
     GET /my/policies HTTP/1.1
     Accept: application/json
@@ -2686,7 +2686,7 @@ ResourceNotFound | If `:account` does not exist
     Api-Version: ~8
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2714,15 +2714,15 @@ ResourceNotFound | If `:account` does not exist
     ]
 
 
-## GetPolicy (GET /:account/policies/:policy)
+### GetPolicy (GET /:account/policies/:policy)
 
 Get an account policy (`:policy`) by `id`.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -2731,18 +2731,18 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences applying to the policy
 description | String   | A description for this policy
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:role` do not exist
 
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-policy get 95ca7b25-5c8f-4c1b-92da-4276f23807f3
 
-### Example Request
+#### Example Request
 
     GET /my/policies/95ca7b25-5c8f-4c1b-92da-4276f23807f3 HTTP/1.1
     Accept: application/json
@@ -2751,7 +2751,7 @@ ResourceNotFound | If `:account` or `:role` do not exist
     Api-Version: ~8
     Authorization: Signature keyId...
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2777,11 +2777,11 @@ ResourceNotFound | If `:account` or `:role` do not exist
     }
 
 
-## CreatePolicy (POST /:account/policies)
+### CreatePolicy (POST /:account/policies)
 
 Creates a new account policy.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -2789,7 +2789,7 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences to be added to the current policy
 description | String   | A description for this policy (Optional)
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -2798,17 +2798,17 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences applying to the policy
 description | String   | A description for this policy
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:role` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-policy create --name=test-policy --description='Policy to test cmdln tool' --rules='CAN rebootmachine, createmachine AND getmachine' --rules='CAN listkeys AND listuserkeys'
 
-### Example Request
+#### Example Request
 
     POST /my/policies HTTP/1.1
     Accept: application/json
@@ -2824,7 +2824,7 @@ ResourceNotFound | If `:account` or `:role` do not exist
         "description": "can reboot any instance"
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     Location: /my/policies/8700e959-4cb3-4337-8afa-fb0a53b5366e
@@ -2852,11 +2852,11 @@ ResourceNotFound | If `:account` or `:role` do not exist
     }
 
 
-## UpdatePolicy (POST /:account/policies/:policy)
+### UpdatePolicy (POST /:account/policies/:policy)
 
 Upgrades an existing account policy.  Everything but id can be modified.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -2864,7 +2864,7 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences to be added to the current policy
 description | String   | A description for this policy (Optional)
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -2873,17 +2873,17 @@ name        | String   | The policy name
 rules       | Array    | One or more Aperture sentences applying to the policy
 description | String   | A description for this policy
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:role` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-policy update 8700e959-4cb3-4337-8afa-fb0a53b5366e --rules='CAN rebootmachine, createmachine AND getmachine' --rules='CAN listkeys AND listuserkeys' --rules='CAN stopmachine, startmachine, renamemachine, enablemachinefirewall AND disablemachinefirewall'
 
-### Example Request
+#### Example Request
 
     POST /my/policies/8700e959-4cb3-4337-8afa-fb0a53b5366e HTTP/1.1
     Accept: application/json
@@ -2897,7 +2897,7 @@ ResourceNotFound | If `:account` or `:role` do not exist
         "description": "Restart any instance, no matter which origin IP"
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -2924,19 +2924,19 @@ ResourceNotFound | If `:account` or `:role` do not exist
     }
 
 
-## DeletePolicy (DELETE /:account/policies/:policy)
+### DeletePolicy (DELETE /:account/policies/:policy)
 
 Delete an RBAC policy. `:policy` must be the policy `id` (a UUID).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -2944,11 +2944,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:account` or `:policy` do not exist
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-policy delete 8700e959-4cb3-4337-8afa-fb0a53b5366e
 
-#### Example Request
+###### Example Request
 
     DELETE /my/policies/8700e959-4cb3-4337-8afa-fb0a53b5366e HTTP/1.1
     Host: api.example.com
@@ -2957,7 +2957,7 @@ ResourceNotFound | If `:account` or `:policy` do not exist
     Authorization: Signature keyId...
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -2974,57 +2974,57 @@ ResourceNotFound | If `:account` or `:policy` do not exist
 
 
 
-# User SSH Keys
+## User SSH Keys
 
 See account [keys](#keys) for a detailed description.  Only difference is the
 path from where you can access users' keys:
 
 
-## ListUserKeys (GET /:account/users/:user/keys)
+### ListUserKeys (GET /:account/users/:user/keys)
 
 Lists all public keys we have on record for the specified account user.
 See [ListKeys](#ListKeys).
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user keys dd71f8bb-f310-4746-8e36-afd7c6dd2895
 
 
-## GetUserKey (GET /:account/users/:user/keys/:key)
+### GetUserKey (GET /:account/users/:user/keys/:key)
 
 Retrieves the given key record either by fingerprint or name.
 See [GetKey](#GetKey).
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user key dd71f8bb-f310-4746-8e36-afd7c6dd2895 '0b:56:ae:c5:d1:7b:7a:98:09:58:1a:a2:0c:22:63:9f'
 
 
-## CreateUserKey (POST /:account/users/:user/keys)
+### CreateUserKey (POST /:account/users/:user/keys)
 
 Creates a new key record.  See [CreateKey](#CreateKey).
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user upload-key -n test 93c3d419-a927-6195-b6fc-b3a4af541aa3 ~/.ssh/id_rsa.pub
 
 
-## DeleteUserKey (DELETE /:account/users/:user/keys/:key)
+### DeleteUserKey (DELETE /:account/users/:user/keys/:key)
 
 Removes a key.  See [GetKey](#GetKey).
 
-### CLI Command:
+#### CLI Command:
 
     $ sdc-user delete-key dd71f8bb-f310-4746-8e36-afd7c6dd2895 '0b:56:ae:c5:d1:7b:7a:98:09:58:1a:a2:0c:22:63:9f'
 
 
 
-# Config
+## Config
 
 These endpoints allow you to get and set configuration values related to your
 account.
 
-## GetConfig (GET /:login/config)
+### GetConfig (GET /:login/config)
 
 Outputs configuration for your account.  The configuration values that are
 currently configurable are:
@@ -3032,19 +3032,19 @@ currently configurable are:
 * `default_network`: the network that docker containers are provisioned on.
 
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An object with configuration values.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
-### CLI Command
+#### CLI Command
 
 A user's default fabric network is stored on this config object. The following
 command uses this endpoint to retrieve it.
@@ -3052,7 +3052,7 @@ command uses this endpoint to retrieve it.
     $ sdc-fabric network get-default
     7fa999c8-0d2c-453e-989c-e897716d0831
 
-### Example Request
+#### Example Request
 
     GET /my/config HTTP/1.1
     Host: api.example.com
@@ -3060,7 +3060,7 @@ command uses this endpoint to retrieve it.
     Authorization: Signature keyId...
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3082,29 +3082,29 @@ command uses this endpoint to retrieve it.
     }
 
 
-## UpdateConfig (PUT /:login/config)
+### UpdateConfig (PUT /:login/config)
 
 Updates configuration values for your account.
 
-### Inputs
+#### Inputs
 
 **Field**       | **Type** | **Description**
 --------------- | -------- | ---------------
 default_network | String   | ID of the network used for provisioning docker containers
 
-### Returns
+#### Returns
 
 An object with the updated configuration.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric network set-default c00cbe98-7dea-44d3-b644-5bd078700bf8
 
-### Example Request
+#### Example Request
 
     PUT /my/config HTTP/1.1
     Host: api.example.com
@@ -3116,7 +3116,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
         "default_network": "c00cbe98-7dea-44d3-b644-5bd078700bf8"
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3140,17 +3140,17 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 
 
 
-# Datacenters
+## Datacenters
 
-## ListDatacenters (GET /:login/datacenters)
+### ListDatacenters (GET /:login/datacenters)
 
 Provides a list of all datacenters this cloud is aware of.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An object where the keys are the datacenter name, and the value is the URL
 endpoint of that datacenter's CloudAPI.
@@ -3161,7 +3161,7 @@ Note that a `Triton-Datacenter-Name` response header was added in 9.2.0.
 --------------- | -------- | ---------------
 $datacentername | URL      | location of the datacenter
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3169,7 +3169,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton datacenters
 
@@ -3177,7 +3177,7 @@ or
 
     $ sdc-listdatacenters
 
-#### Example Request
+###### Example Request
 
     GET /my/datacenters HTTP/1.1
     Host: api.example.com
@@ -3186,7 +3186,7 @@ or
     Api-Version: ~8
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3209,21 +3209,21 @@ or
     }
 
 
-## GetDatacenter (GET /:login/datacenters/:name)
+### GetDatacenter (GET /:login/datacenters/:name)
 
 Gets an individual datacenter by name.  Returns an HTTP redirect to your client,
 where the datacenter url is in the Location header.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An object formatted like an Error Response; check the `Location` header for the
 URL itself.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3231,11 +3231,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist or `:name` does not exist
 
-### CLI Command
+#### CLI Command
 
 * None
 
-### Example Request
+#### Example Request
 
     GET /my/datacenters/example HTTP/1.1
     Host: api.example.com
@@ -3243,7 +3243,7 @@ ResourceNotFound | If `:login` does not exist or `:name` does not exist
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 302 Moved Temporarily
     Location: https://api.example.com
@@ -3269,18 +3269,18 @@ ResourceNotFound | If `:login` does not exist or `:name` does not exist
 
 
 
-# Services
+## Services
 
-## ListServices (GET /:login/services)
+### ListServices (GET /:login/services)
 
 Provides the URL endpoints for services for this datacenter. It is a mapping of
 service name to URL endpoint.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An object where the keys are the service name, and the value is the URL
 endpoint.
@@ -3289,7 +3289,7 @@ endpoint.
 ------------ | -------- | ---------------
 $serviceName | URL      | URL endpoint of that service
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3297,11 +3297,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton services
 
-#### Example Request
+###### Example Request
 
     GET /my/services HTTP/1.1
     Host: api.example.com
@@ -3310,7 +3310,7 @@ ResourceNotFound | If `:login` does not exist
     Api-Version: ~8
     Content-Length: 0
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3336,14 +3336,14 @@ ResourceNotFound | If `:login` does not exist
 
 
 
-# Images
+## Images
 
 An [image](#image-description) contains the software packages that will be
 available on newly-provisioned instance.  In the case of hardware virtual
 machines, the image also includes the operating system.
 
 
-## ListImages (GET /:login/images)
+### ListImages (GET /:login/images)
 
 Provides a list of images available in this datacenter.
 
@@ -3352,7 +3352,7 @@ You must use `docker images` against the
 [docker](https://apidocs.joyent.com/docker) service for this datacenter.
 
 
-### Inputs
+#### Inputs
 
 The following optional query parameters are available to filter the list of
 images:
@@ -3367,7 +3367,7 @@ state     | String   | Filter on image [state](https://images.joyent.com/docs/#m
 owner     | String   | Filter on owner UUID
 type      | String   | Filter on image type. The types changed in v8.0.0
 
-### Returns
+#### Returns
 
 An array of images.  Image objects include the following fields:
 
@@ -3402,7 +3402,7 @@ error.message| String   | A short description of the image creation failure
 
 <!-- TODO: list possible error.code values, link to troubleshooting docs -->
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3410,7 +3410,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton image list
 
@@ -3418,7 +3418,7 @@ or
 
     $ sdc-listimages
 
-### Example Request
+#### Example Request
 
     GET /my/images HTTP/1.1
     Host: api.example.com
@@ -3426,7 +3426,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3473,15 +3473,15 @@ or
     ]
 
 
-## GetImage (GET /:login/images/:id)
+### GetImage (GET /:login/images/:id)
 
 Gets an individual image by `id`.
 
-### Inputs
+#### Inputs
 
 None
 
-### Returns
+#### Returns
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
@@ -3521,11 +3521,11 @@ VmHasNoOrigin  | Origin image data could not be found for the instance. Typicall
 NotSupported   | Indicates an error due to functionality that isn't currently supported. One example is that custom image creation of an instance based on a custom image isn't currently supported
 InternalError  | A catch-all error for unexpected or internal errors
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
-### CLI Command
+#### CLI Command
 
     $ triton image get 2b683a82-a066-11e3-97ab-2faa44701c5a
 
@@ -3533,7 +3533,7 @@ or
 
     $ sdc-getimage 2b683a82-a066-11e3-97ab-2faa44701c5a
 
-#### Example Request
+###### Example Request
 
     GET /my/images/2b683a82-a066-11e3-97ab-2faa44701c5a HTTP/1.1
     Host: api.example.com
@@ -3541,7 +3541,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3585,19 +3585,19 @@ or
     }
 
 
-## DeleteImage (DELETE /:login/images/:id)
+### DeleteImage (DELETE /:login/images/:id)
 
 Delete an image.  Caller must be the owner of the image to delete it.
 
-### Inputs
+#### Inputs
 
 None
 
-### Returns
+#### Returns
 
 Responds with HTTP 204 'No Content'.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3605,7 +3605,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton image delete 2b683a82-a066-11e3-97ab-2faa44701c5a
 
@@ -3613,7 +3613,7 @@ or
 
     $ sdc-deleteimage 2b683a82-a066-11e3-97ab-2faa44701c5a
 
-#### Example Request
+###### Example Request
 
     DELETE /my/images/2b683a82-a066-11e3-97ab-2faa44701c5a HTTP/1.1
     Authorization: ...
@@ -3621,7 +3621,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Content-Type: application/json
@@ -3638,7 +3638,7 @@ or
     Response-Time: 1262
 
 
-## ExportImage (POST /:login/images/:id?action=export)
+### ExportImage (POST /:login/images/:id?action=export)
 
 Exports an image to the specified Manta path.  Caller must be the owner of the
 image, and the correspondent Manta path prefix, in order to export it.  Both the
@@ -3664,19 +3664,19 @@ the following shows how to export foo-1.0.0 with a custom name:
     /user/stor/my-image.imgmanifest
     /user/stor/my-image.zfs.gz
 
-### Inputs
+#### Inputs
 
 **Field**  | **Type** | **Description**
 ---------- | -------- | ---------------
 manta_path | String   | Manta path prefix used when exporting the image
 
-### Returns
+#### Returns
 
 A Manta location response object.  It provides the properties that allow a
 CloudAPI user to retrieve the image file and manifest from Manta: manta_url,
 image_path, manifest_path.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -3684,11 +3684,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-exportimage --mantaPath=/user/stor/my-image 0c428eb9-7f03-4bb0-ac9f-c0718945d604
 
-#### Example Request
+###### Example Request
 
     POST /my/images/e42f8c84-bbea-11e2-b920-078fab2aab1f?action=export&manta_path=/user/stor/my-image HTTP/1.1
     Authorization: ...
@@ -3696,7 +3696,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     Accept: application/json
     Api-Version: ~8
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -3720,7 +3720,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     }
 
 
-## CreateImageFromMachine (POST /:login/images)
+### CreateImageFromMachine (POST /:login/images)
 
 Create a new custom image from an instance.  The typical process is:
 
@@ -3729,7 +3729,7 @@ Create a new custom image from an instance.  The typical process is:
 3. Repeat from step 1 if more customizations are desired with different images.
 4. Use the new image(s) for provisioning via [CreateMachine](#CreateMachine).
 
-### Inputs
+#### Inputs
 
 All inputs except `machine` are image manifest fields as defined by
 [the IMGAPI docs](https://images.joyent.com/docs/#image-manifests).  Note that
@@ -3746,7 +3746,7 @@ eula        | String   | No  | The image [eula](https://images.joyent.com/docs/#
 acl         | String   | No  | The image [acl](https://images.joyent.com/docs/#manifest-acl)
 tags        | String   | No  | The image [tags](https://images.joyent.com/docs/#manifest-tags)
 
-### Returns
+#### Returns
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
@@ -3769,7 +3769,7 @@ tags         | Object   | An object of key/value pairs that allows clients to ca
 eula         | String   | URL of the End User License Agreement (EULA) for the image
 acl          | Array    | Access Control List. An array of account UUIDs given access to a private image. The field is only relevant to private images
 
-### Errors
+#### Errors
 
 For general errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 Some typical and specific errors for this endpoint:
@@ -3781,7 +3781,7 @@ NotAvailable   | Typically this indicates that image creation is not supported f
 
 <!-- TODO: integrate these errors into the general table above -->
 
-### Example CLI Command
+#### Example CLI Command
 
     $ triton image create a44f2b9b-e7af-f548-b0ba-4d9270423f1a my-custom-image 1.0.0
 
@@ -3789,7 +3789,7 @@ or
 
     $ sdc-createimagefrommachine --machine=a44f2b9b-e7af-f548-b0ba-4d9270423f1a --name=my-custom-image --imageVersion=1.0.0
 
-#### Example HTTP Request
+###### Example HTTP Request
 
     POST /my/images HTTP/1.1
     Authorization: ...
@@ -3803,7 +3803,7 @@ or
       "version": "1.0.0"
     }
 
-#### Example HTTP Response
+###### Example HTTP Response
 
     HTTP/1.1 201 Created
     x-joyent-jobid: 0b30ef20-d622-436a-9c30-7376ba7d904c
@@ -3833,7 +3833,7 @@ or
     }
 
 
-## ImportImageFromDatacenter (POST /:login/images?action=import-from-datacenter)
+### ImportImageFromDatacenter (POST /:login/images?action=import-from-datacenter)
 
 This will copy the image with `id` from the source `datacenter` into this
 datacenter. The copied image will retain all fields (e.g. `id`, `published_at`)
@@ -3843,7 +3843,7 @@ copied.
 You can use [triton datacenters](#ListDatacenters) to view the list of
 datacenter names in the current cloud.
 
-### Inputs
+#### Inputs
 
 The following query parameters are required, these parameters will be used to
 identify the image to be copied.
@@ -3853,12 +3853,12 @@ identify the image to be copied.
 datacenter | String   | The datacenter name from where the image will be copied from.
 id         | UUID     | The id of the image to be copied.
 
-### Returns
+#### Returns
 
 On success, an Image object is returned. See [GetImage](#GetImage) for the
 fields that are returned in the image object.
 
-### Errors
+#### Errors
 
 For general errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 Some typical and specific errors for this endpoint:
@@ -3872,11 +3872,11 @@ OriginIsNotActiveError | If one of the incremental (origin) images is not activa
 
 <!-- TODO: integrate these errors into the general table above -->
 
-### Example CLI Command
+#### Example CLI Command
 
     $ triton image copy 7eed8e50-e452-428d-9131-bf056aa911bd us-west-1
 
-#### Example HTTP Request
+###### Example HTTP Request
 
     POST /my/images?action=import-from-datacenter&datacenter=us-west-1&id=7eed8e50-e452-428d-9131-bf056aa911bd HTTP/1.1
     Authorization: ...
@@ -3886,7 +3886,7 @@ OriginIsNotActiveError | If one of the incremental (origin) images is not activa
 
     {}
 
-#### Example HTTP Response
+###### Example HTTP Response
 
     HTTP/1.1 201 Created
     Content-Type: application/json
@@ -3924,11 +3924,11 @@ OriginIsNotActiveError | If one of the incremental (origin) images is not activa
       "state": "active"
     }
 
-## UpdateImage (POST /:login/images/:id?action=update)
+### UpdateImage (POST /:login/images/:id?action=update)
 
 Updates metadata about an image.
 
-### Inputs
+#### Inputs
 
 Only the image attributes listed below can be updated.
 
@@ -3942,7 +3942,7 @@ eula        | String   | The image [eula](https://images.joyent.com/docs/#manife
 acl         | String   | The image [acl](https://images.joyent.com/docs/#manifest-acl)
 tags        | String   | The image [tags](https://images.joyent.com/docs/#manifest-tags)
 
-### Returns
+#### Returns
 
 An updated image object.
 
@@ -3967,7 +3967,7 @@ tags         | Object   | An object of key/value pairs that allows clients to ca
 eula         | String   | URL of the End User License Agreement (EULA) for the image
 acl          | Array    | Access Control List. An array of account UUIDs given access to a private image. The field is only relevant to private images
 
-### Errors
+#### Errors
 
 For general errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 Some typical and specific errors for this endpoint:
@@ -3976,11 +3976,11 @@ Some typical and specific errors for this endpoint:
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### Example CLI Command
+#### Example CLI Command
 
     $ sdc-updateimage --name=my-renamed-image eca995fe-b904-11e3-b05a-83a4899322dc
 
-#### Example HTTP Request
+###### Example HTTP Request
 
     POST /my/images/eca995fe-b904-11e3-b05a-83a4899322dc?action=update HTTP/1.1
     Authorization: ...
@@ -3992,7 +3992,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
       "name": "my-renamed-image",
     }
 
-#### Example HTTP Response
+###### Example HTTP Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -4025,7 +4025,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
 
 
 
-## CloneImage (POST /:login/images/:id?action=clone)
+### CloneImage (POST /:login/images/:id?action=clone)
 
 Creates an independent copy of the source image. The `login` account must be on
 the source image ACL to be able to make an image clone.
@@ -4039,16 +4039,16 @@ All incremental images in the image origin chain that are not operator images
 images will have state `disabled` so that they are not visible in the default
 image listings.
 
-### Inputs
+#### Inputs
 
 None.
 
-### Returns
+#### Returns
 
 A cloned image object. See [GetImage](#GetImage) docs for the image fields
 returned.
 
-### Errors
+#### Errors
 
 For general errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 Some typical and specific errors for this endpoint:
@@ -4059,11 +4059,11 @@ ResourceNotFound   | If `:login` or `:id` does not exist.
 NotImageOwnerError | If your account is not the owner of the image.
 ImageNotShared     | When the given image is not shared with your account.
 
-### Example CLI Command
+#### Example CLI Command
 
     $ triton image clone eca995fe-b904-11e3-b05a-83a4899322dc
 
-#### Example HTTP Request
+###### Example HTTP Request
 
     POST /my/images/eca995fe-b904-11e3-b05a-83a4899322dc?action=clone HTTP/1.1
     Authorization: ...
@@ -4071,7 +4071,7 @@ ImageNotShared     | When the given image is not shared with your account.
     Accept: application/json
     Api-Version: ~8
 
-#### Example HTTP Response
+###### Example HTTP Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -4104,18 +4104,18 @@ ImageNotShared     | When the given image is not shared with your account.
 
 
 
-# Packages
+## Packages
 
 [Packages](#packages-description) are named collections of resources that are
 used to describe the dimensions of either a container or a hardware virtual
 machine.  These resources include (but are not limited to) RAM size, CPUs, CPU
 caps, lightweight threads, disk space, swap size, and logical networks.
 
-## ListPackages (GET /:login/packages)
+### ListPackages (GET /:login/packages)
 
 Provides a list of packages available in this datacenter.
 
-### Inputs
+#### Inputs
 
 * The following are all optional inputs:
 
@@ -4139,7 +4139,7 @@ to list all packages with a name that starts with "foo", give "foo*" as the
 package name.
 
 
-### Returns
+#### Returns
 
 An array of objects, of the form:
 
@@ -4160,7 +4160,7 @@ flexible_disk | Boolean  | Whether this is a flexible_disk package (bhyve only)
 default       | Boolean  | (deprecated) Whether this is the default package in this datacenter
 
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -4168,7 +4168,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton package list
 
@@ -4176,7 +4176,7 @@ or
 
     $ sdc-listpackages
 
-### Example Request
+#### Example Request
 
     GET /my/packages HTTP/1.1
     Host: api.example.com
@@ -4184,7 +4184,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -4217,15 +4217,15 @@ or
     ]
 
 
-## GetPackage (GET /:login/packages/:id)
+### GetPackage (GET /:login/packages/:id)
 
 Gets a package by `name` or `id`.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field**     | **Type** | **Description**
 ------------- | -------- | ---------------
@@ -4243,7 +4243,7 @@ disks         | Array    | The disks this package contains (Allowed when flexibl
 flexible_disk | Boolean  | Whether this is a flexible_disk package (bhyve only)
 default       | Boolean  | (deprecated) Whether this is the default package in this datacenter
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -4251,7 +4251,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton package get 7b17343c-94af-6266-e0e8-893a3b9993d0
 
@@ -4259,7 +4259,7 @@ or
 
     $ sdc-getpackage 7b17343c-94af-6266-e0e8-893a3b9993d0
 
-### Example Request
+#### Example Request
 
     GET /my/packages/7b17343c-94af-6266-e0e8-893a3b9993d0 HTTP/1.1
     Host: api.example.com
@@ -4267,7 +4267,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -4299,7 +4299,7 @@ or
 
 
 
-# Instances
+## Instances
 
 Triton supports three different types of instances:
 
@@ -4312,7 +4312,7 @@ performance, observability and operational flexibility. Harware-virtualized
 machines are useful for non-SmartOS or non-Linux stacks.
 
 
-## ListMachines (GET /:login/machines)
+### ListMachines (GET /:login/machines)
 
 Lists all instances we have on record for your account.  If you have a large
 number of instances, you can filter using the input parameters listed below.
@@ -4328,7 +4328,7 @@ Note that there is a `HEAD /:login/machines` form of this API, so you can
 retrieve the number of instances without retrieving a JSON describing the
 instances themselves.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -4357,7 +4357,7 @@ too can have the value of "dhcp", and the package string can be empty instead of
 a UUID. Unless ops is bypassing CloudAPI and creating instances directly, it is
 unlikely you need concern yourself with this caveat.
 
-### Returns
+#### Returns
 
 An array of instance objects, which contain:
 
@@ -4387,7 +4387,7 @@ package     | String   | The id or name of the package used to create this insta
 flexible    | Boolean | Whether this instance uses the flexible disk space feature (bhyve)
 free_space  | Number | The amount of space (MiB) that is not allocated to disks nor in use by snapshots of those disks. If snapshots are present, writes to disks may reduce this value (bhyve)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -4396,7 +4396,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login` does not exist
 InvalidArgument  | If one of the input parameters was invalid
 
-### CLI Command
+#### CLI Command
 
 Get all instance:
 
@@ -4446,7 +4446,7 @@ The CLI has parameters that let you filter on most things in the API, and you
 can combine them.  Run `triton instance list --help` or
 `sdc-listmachines --help` to see all the options.
 
-### Example Request
+#### Example Request
 
     GET /my/machines HTTP/1.1
     Authorization: ...
@@ -4454,7 +4454,7 @@ can combine them.  Run `triton instance list --help` or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     x-query-limit: 1000
@@ -4505,20 +4505,20 @@ can combine them.  Run `triton instance list --help` or
     ]
 
 
-## GetMachine (GET /:login/machines/:id)
+### GetMachine (GET /:login/machines/:id)
 
 Gets the details for an individual instance.
 
 Deleted instances are returned only if the instance history has not
 been purged from Triton.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
 credentials | Boolean  | Whether to include the generated credentials for instances, if present. Defaults to false.
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -4555,7 +4555,7 @@ too can have the value of "dhcp", and the package string can be empty instead of
 a UUID. Unless ops is bypassing CloudAPI and creating instances directly, it is
 unlikely you need concern yourself with this caveat.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -4563,7 +4563,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
 Get the details for the instance with id 75cfe125-a5ce-49e8-82ac-09aa31ffdf26:
 
@@ -4573,7 +4573,7 @@ or
 
     $ sdc-getmachine b6979942-7d5d-4fe6-a2ec-b812e950625a
 
-### Example Request
+#### Example Request
 
     GET /my/machines/b6979942-7d5d-4fe6-a2ec-b812e950625a HTTP/1.1
     Authorization: ...
@@ -4581,7 +4581,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -4628,7 +4628,7 @@ or
     }
 
 
-## CreateMachine (POST /:login/machines)
+### CreateMachine (POST /:login/machines)
 
 Allows you to provision an instance.
 
@@ -4694,7 +4694,7 @@ automatic DNS search path would include
 "inst.35ad1ec4-2eab-11e6-ac02-8f56c66976a1.us-west-1.triton.zone". This can
 be changed later within the instance, if desired.
 
-### Inputs
+#### Inputs
 
 
 **Field** | **Type** | **Description**
@@ -4713,7 +4713,7 @@ allow_shared_images | Boolean | Whether to allow provisioning from a shared imag
 volumes   | Array    | A list of objects representing volumes to mount when the newly created machine boots
 disks     | Array    | An array of disk objects to be created (bhyve)
 
-#### volumes
+###### volumes
 
 The `volumes` input parameter allows users to specify a list of volumes to mount
 in the new machine when it boots:
@@ -4743,7 +4743,7 @@ type       | String   | The type of the volume to mount (currently only `"triton
 mode       | String   | Determines the read/write mode for the volume to mount. Accepted values are `"ro"` (for read-only) and `"rw"` (for read-write). The default value is `"rw"`.
 mountpoint | String   | Specifies where the volume is mounted in the newly created machine's filesystem. It must start with a slash (`"/"`) and it must contain at least one character that is not `'/'`.
 
-#### disks
+###### disks
 The `disks` input parameter allows users to specify a list of disks to be provisioned when creating a bhyve instance. This parameter can only be specified if the package has its `flexible_disk` attribute set to `true`. The sum of the sizes of the disks may be no greater than the package quota.
 
 ```
@@ -4772,7 +4772,7 @@ boot       | Boolean  | If `true`, this is the boot disk
 image      | UUID     | The image from which the disk was created
 size       | Integer  | The size of the disk in mebibytes or "remaining". If "remaining", size will be set to the difference between the package quota and sum of the other disks.
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -4794,7 +4794,7 @@ free_space  | Number   | The amount of space (MiB) that is not allocated to disk
 created     | ISO8601 date | When this instance was created
 updated     | ISO8601 date | When this instance's details was last updated
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -4805,7 +4805,7 @@ InsufficientCapacity | There isn't enough capacity in this datacenter
 InvalidArgument      | If one of the input parameters was invalid
 MissingParameter     | If one of the input parameters was missing
 
-### CLI Command
+#### CLI Command
 
     $ triton instance create 2b683a82-a066-11e3-97ab-2faa44701c5a 7b17343c-94af-6266-e0e8-893a3b9993d0
 
@@ -4813,7 +4813,7 @@ or
 
     $ sdc-createmachine --image=2b683a82-a066-11e3-97ab-2faa44701c5a --package=7b17343c-94af-6266-e0e8-893a3b9993d0
 
-### Example Request
+#### Example Request
 
     POST /my/machines HTTP/1.1
     Authorization: ...
@@ -4828,7 +4828,7 @@ or
       "package": "7b17343c-94af-6266-e0e8-893a3b9993d0"
     }
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     Location: /my/machines/e8622950-af78-486c-b682-dd147c938dc6
@@ -4868,7 +4868,7 @@ or
       "package": "sdc_128"
     }
 
-### More Examples
+#### More Examples
 
 Create instance with multiple nics
 
@@ -4887,7 +4887,7 @@ or
     $ sdc-createmachine --image=2b683a82-a066-11e3-97ab-2faa44701c5a --package=7b17343c-94af-6266-e0e8-893a3b9993d0 -t foo=bar -t group=test
 
 
-### Network objects
+#### Network objects
 
 As of CloudAPI v8.5.0 the networks parameter to CreateMachine takes an array of
 network objects to add flexibility and more control. It is also still possible
@@ -4917,7 +4917,7 @@ Here are some examples of possible network objects:
     ]
 
 
-### Affinity rules
+#### Affinity rules
 
 As of CloudAPI v8.3.0 an "affinity" field can be specified with CreateMachine.
 It is an array of "affinity rules" to specify rules (or hints, "soft rules") for
@@ -4961,7 +4961,7 @@ against instance names or IDs, or against the named tag's value. Some examples:
     triton instance create -a 'instance!=/^foo/' ...
 
 
-### Locality hints
+#### Locality hints
 
 (Deprecated in CloudAPI v8.3.0.)
 
@@ -4987,7 +4987,7 @@ string directly as the value to a near/far key.
 server fits all the requirements. If `strict` is set to true, the creation of
 the new instance will fail if the affinity criteria cannot be met.
 
-### User-script
+#### User-script
 
 The special value `metadata.user-script` can be specified to provide a custom
 script which will be executed by the instance right after creation, and on every
@@ -4996,24 +4996,24 @@ instance reboot.  This script can be specified using the command-line option
 the instance.
 
 
-## StopMachine (POST /:login/machines/:id?action=stop)
+### StopMachine (POST /:login/machines/:id?action=stop)
 
 Allows you to shut down an instance.  POST to the instance name with an `action`
 of `stop`.
 
 You can poll on [GetMachine](#GetMachine) until the state is `stopped`.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "stop"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5024,7 +5024,7 @@ InvalidState     | The instance is in the wrong state to be stopped
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ triton instance stop c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
@@ -5032,7 +5032,7 @@ or
 
     $ sdc-stopmachine c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5044,7 +5044,7 @@ or
 
     action=stop
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5060,24 +5060,24 @@ or
     Transfer-Encoding: chunked
 
 
-## StartMachine (POST /:login/machines/:id?action=start)
+### StartMachine (POST /:login/machines/:id?action=start)
 
 Allows you to boot up an instance.  POST to the instance name with an `action`
 of `start`.
 
 You can poll on [GetMachine](#GetMachine) until the state is `running`.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "start"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5088,7 +5088,7 @@ InvalidState     | The instance is in the wrong state to be started
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ triton instance start c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
@@ -5096,7 +5096,7 @@ or
 
     $ sdc-startmachine c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5108,7 +5108,7 @@ or
 
     action=start
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5124,24 +5124,24 @@ or
     Transfer-Encoding: chunked
 
 
-## RebootMachine (POST /:login/machines/:id?action=reboot)
+### RebootMachine (POST /:login/machines/:id?action=reboot)
 
 Allows you to reboot an instance.  POST to the instance name with an `action` of
 `reboot`.
 
 You can poll on [GetMachine](#GetMachine) until the state is `running`.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "reboot"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5152,7 +5152,7 @@ InvalidState     | The instance is in the wrong state to be stopped
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ triton instance reboot c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
@@ -5160,7 +5160,7 @@ or
 
     $ sdc-rebootmachine c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5172,7 +5172,7 @@ or
 
     action=reboot
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5188,7 +5188,7 @@ or
     Transfer-Encoding: chunked
 
 
-## ResizeMachine (POST /:login/machines/:id?action=resize)
+### ResizeMachine (POST /:login/machines/:id?action=resize)
 
 Resize an instance to a new [package](#packages) (a.k.a. instance type).
 
@@ -5200,18 +5200,18 @@ Resizing is not guaranteed to work, especially when resizing upwards in
 resources. It is best-effort, and may fail. Resizing downwards will usually
 succeed.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "resize"
 package   | String   | A package id, as returned from [ListPackages](#ListPackages)
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5222,11 +5222,11 @@ InvalidState     | The instance is in the wrong state to be resized
 InvalidArgument  | If `action` was invalid, or `package` wasn't a valid id or name
 MissingParameter | If `action` or `package` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ sdc-resizemachine --package=7041ccc7-3f9e-cf1e-8c85-a9ee41b7f968 c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5238,7 +5238,7 @@ MissingParameter | If `action` or `package` wasn't provided
 
     action=resize&package=7041ccc7-3f9e-cf1e-8c85-a9ee41b7f968
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5253,23 +5253,23 @@ MissingParameter | If `action` or `package` wasn't provided
     Response-Time: 161
 
 
-## RenameMachine (POST /:login/machines/:id?action=rename)
+### RenameMachine (POST /:login/machines/:id?action=rename)
 
 Allows you to rename an instance.  POST to the instance `id` with an action of
 `rename`.  You must additionally include a new name for the instance.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "rename"
 name      | String   | The new "friendly" name for this instance
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5280,11 +5280,11 @@ InvalidState     | The instance is in the wrong state to be stopped
 InvalidArgument  | If `action` was invalid, or `name` wasn't a valid name
 MissingParameter | If `action` or `name` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ sdc-renamemachine --name=new_friendly_name c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5296,7 +5296,7 @@ MissingParameter | If `action` or `name` wasn't provided
 
     action=rename&name=new_friendly_name
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5312,21 +5312,21 @@ MissingParameter | If `action` or `name` wasn't provided
     Transfer-Encoding: chunked
 
 
-## EnableMachineFirewall (POST /:login/machines/:id?action=enable_firewall)
+### EnableMachineFirewall (POST /:login/machines/:id?action=enable_firewall)
 
 Allows you to enable the firewall for an instance.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- |--------- | ---------------
 action    | String   | Use the exact string "enable_firewall"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5337,7 +5337,7 @@ InvalidState     | The instance is in the wrong state to enable firewall
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ triton instance enable-firewall c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
@@ -5345,7 +5345,7 @@ or
 
     $ sdc-enablemachinefirewall c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5357,7 +5357,7 @@ or
 
     action=enable_firewall
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5373,21 +5373,21 @@ or
     Transfer-Encoding: chunked
 
 
-## DisableMachineFirewall (POST /:login/machines/:id?action=disable_firewall)
+### DisableMachineFirewall (POST /:login/machines/:id?action=disable_firewall)
 
 Allows you to completely disable the firewall of an instance.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "disable_firewall"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5398,7 +5398,7 @@ InvalidState     | The instance is in the wrong state to disable firewall
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### CLI Command
+#### CLI Command
 
     $ triton instance disable-firewall c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
@@ -5406,7 +5406,7 @@ or
 
     $ sdc-disablemachinefirewall c2855c3a-a91d-46b8-9da6-6d7ab1bc6962
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5418,7 +5418,7 @@ or
 
     action=disable_firewall
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5435,22 +5435,22 @@ or
 
 
 
-## EnableMachineDeletionProtection (POST /:login/machines/:id?action=enable_deletion_protection)
+### EnableMachineDeletionProtection (POST /:login/machines/:id?action=enable_deletion_protection)
 
 Enable [Deletion Protection](#deletion-protection) on an instance. An instance
 can no longer be destroyed until the protection is disabled.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- |--------- | ---------------
 action    | String   | Use the exact string "enable_deletion_protection"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5461,7 +5461,7 @@ InvalidState     | The instance is in the wrong state to enable firewall
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5473,7 +5473,7 @@ MissingParameter | If `action` wasn't provided
 
     action=enable_deletion_protection
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5489,22 +5489,22 @@ MissingParameter | If `action` wasn't provided
     Transfer-Encoding: chunked
 
 
-## DisableMachineDeletionProtection (POST /:login/machines/:id?action=disable_deletion_protection)
+### DisableMachineDeletionProtection (POST /:login/machines/:id?action=disable_deletion_protection)
 
 Disable [Deletion Protection](#deletion-protection) on an instance. An instance
 can be destroyed after it is disabled.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | Use the exact string "disable_deletion_protection"
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5515,7 +5515,7 @@ InvalidState     | The instance is in the wrong state to disable firewall
 InvalidArgument  | If `action` was invalid
 MissingParameter | If `action` wasn't provided
 
-### Example Request
+#### Example Request
 
     POST /my/machines/c2855c3a-a91d-46b8-9da6-6d7ab1bc6962 HTTP/1.1
     Host: api.example.com
@@ -5527,7 +5527,7 @@ MissingParameter | If `action` wasn't provided
 
     action=disable_deletion_protection
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5543,7 +5543,7 @@ MissingParameter | If `action` wasn't provided
     Transfer-Encoding: chunked
 
 
-## CreateMachineSnapshot (POST /:login/machines/:id/snapshots)
+### CreateMachineSnapshot (POST /:login/machines/:id/snapshots)
 
 Allows you to take a snapshot of an instance.  Once you have one or more
 snapshots, you can boot the instance from a previous snapshot.
@@ -5560,20 +5560,20 @@ accordingly.
 You can poll on [GetMachineSnapshot](#GetMachineSnapshot) until the `state` is
 `created`.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 name      | String   | The name to assign to the new snapshot
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 name      | String   | The name of this snapshot
 state     | String   | The current state of the snapshot
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5582,7 +5582,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login` or `:id` does not exist
 InvalidArgument  | If `name` was invalid
 
-### CLI Command
+#### CLI Command
 
     $ triton instance snapshot create 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
@@ -5590,7 +5590,7 @@ or
 
     $ sdc-createmachinesnapshot --name=just-booted 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots HTTP/1.1
     Authorization: ...
@@ -5602,7 +5602,7 @@ or
 
     name=just-booted
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     Location: /mark/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots/just-booted
@@ -5626,21 +5626,21 @@ or
     }
 
 
-## StartMachineFromSnapshot (POST /:login/machines/:id/snapshots/:name)
+### StartMachineFromSnapshot (POST /:login/machines/:id/snapshots/:name)
 
 If an instance is in the 'stopped' state, you can choose to start the instance
 from the referenced snapshot. This is effectively a means to roll back instance
 state.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5648,7 +5648,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:name` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton instance start --snapshot=just-booted 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
@@ -5656,7 +5656,7 @@ or
 
     $ sdc-startmachinefromsnapshot --snapshot=just-booted 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots/just-booted HTTP/1.1
     Authorization: ...
@@ -5666,7 +5666,7 @@ or
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 202 Accepted
     Access-Control-Allow-Origin: *
@@ -5680,16 +5680,16 @@ or
     Content-Length: 0
 
 
-## ListMachineSnapshots (GET /:login/machines/:id/snapshots)
+### ListMachineSnapshots (GET /:login/machines/:id/snapshots)
 
 Lists all snapshots taken for a given instance.  There are no filtration
 parameters for this API.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of snapshots:
 
@@ -5699,7 +5699,7 @@ name      | String   | The name of this snapshot
 state     | String   | The current state of the snapshot
 size      | Number   | The size of the snapshot (MiB)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5707,7 +5707,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton instance snapshot list 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
@@ -5715,7 +5715,7 @@ or
 
     $ sdc-listmachinesnapshots 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     GET /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots HTTP/1.1
     Authorization: ...
@@ -5725,7 +5725,7 @@ or
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 Ok
     Access-Control-Allow-Origin: *
@@ -5750,22 +5750,22 @@ or
     ]
 
 
-## GetMachineSnapshot (GET /:login/machines/:id/snapshots/:name)
+### GetMachineSnapshot (GET /:login/machines/:id/snapshots/:name)
 
 Gets the state of the named snapshot.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 name      | String   | The name of this snapshot
 state     | String   | The current state of the snapshot (poll until it's "created")
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5773,7 +5773,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:name` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton instance snapshot get 5e42cd1e-34bb-402f-8796-bf5a2cae47db just-booted
 
@@ -5781,7 +5781,7 @@ or
 
     $ sdc-getmachinesnapshot --snapshot=just-booted 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     GET /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots/just-booted HTTP/1.1
     Authorization: ...
@@ -5791,7 +5791,7 @@ or
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: *
@@ -5814,19 +5814,19 @@ or
     }
 
 
-## DeleteMachineSnapshot (DELETE /:login/machines/:id/snapshots/:name)
+### DeleteMachineSnapshot (DELETE /:login/machines/:id/snapshots/:name)
 
 Deletes the specified snapshot of an instance.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5834,7 +5834,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:name` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton instance snapshot delete 5e42cd1e-34bb-402f-8796-bf5a2cae47db just-booted
 
@@ -5842,7 +5842,7 @@ or
 
     $ sdc-deletemachinesnapshot --snapshot=just-booted 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/snapshots/just-booted HTTP/1.1
     Authorization: ...
@@ -5852,7 +5852,7 @@ or
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -5866,7 +5866,7 @@ or
     Content-Length: 0
 
 
-## CreateMachineDisk (POST /:login/machines/:id/disks)
+### CreateMachineDisk (POST /:login/machines/:id/disks)
 
 **Interface is experimental; details may change in the future**
 
@@ -5875,14 +5875,14 @@ Create a new disk for a bhyve VM.
 The sum of all disk sizes on a VM is limited by flexible disk space. This
 operation only applies for VMs that are currently stopped.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 pci_slot  | String   | Optional, PCI slot that the disk will fill
 size      | Number   | Size in MiB, or the string "remaining" to use up all remaining available space
 
-### Returns
+#### Returns
 
 If no `pci_slot` argument was provided, then only a 202 (and no object) will
 be returned. You will need to poll [ListMachineDisks](#list-machine-disks)
@@ -5900,7 +5900,7 @@ size      | Number   | Size in MiB (before resize)
 boot      | Boolean  | If this is the VM's boot disk
 state     | String   | Current state of disk (i.e. 'creating')
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5909,12 +5909,12 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login` or `:id`  does not exist
 InvalidArgument  | If `size` or `pci_slot` was invalid
 
-### CLI Command
+#### CLI Command
 
     $ triton cloudapi /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks \
       -X POST -d '{"pci_slot":"0:4:1", "size": 1024}'
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks HTTP/1.1
     Authorization: ...
@@ -5927,7 +5927,7 @@ InvalidArgument  | If `size` or `pci_slot` was invalid
     pci_slot=0:4:1
     size=1024
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: *
@@ -5951,7 +5951,7 @@ InvalidArgument  | If `size` or `pci_slot` was invalid
 
 
 
-## ResizeMachineDisk (POST /:login/machines/:id/disks/:disk_id)
+### ResizeMachineDisk (POST /:login/machines/:id/disks/:disk_id)
 
 **Interface is experimental; details may change in the future**
 
@@ -5969,14 +5969,14 @@ been prepared properly beforehand.
 Since this is an asynchronous operation, resizing may take several seconds.
 Check the disk's state using [GetMachineDisk](#GetMachineDisk).
 
-### Inputs
+#### Inputs
 
 **Field**              | **Type** | **Description**
 ---------------------- | -------- | ---------------
 size                   | Number   | Size in MiB
 dangerous_allow_shrink | Boolean  | Optional, whether a disk can reduce size
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
@@ -5986,7 +5986,7 @@ size      | Number   | Size in MiB (before resize)
 boot      | Boolean  | If this is the VM's boot disk
 state     | String   | Current state of disk (i.e. 'resizing')
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -5995,12 +5995,12 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login`, `:id`, or `:disk_id` does not exist
 InvalidArgument  | If `size` or `dangerous_allow_shrink` was invalid
 
-### CLI Command
+#### CLI Command
 
     $ triton cloudapi /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9 \
       -X POST -d '{"size": 2048}'
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9 HTTP/1.1
     Authorization: ...
@@ -6012,7 +6012,7 @@ InvalidArgument  | If `size` or `dangerous_allow_shrink` was invalid
 
     size=2048
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: *
@@ -6036,17 +6036,17 @@ InvalidArgument  | If `size` or `dangerous_allow_shrink` was invalid
     }
 
 
-## GetMachineDisk (GET /:login/machines/:id/disks/:disk_id)
+### GetMachineDisk (GET /:login/machines/:id/disks/:disk_id)
 
 **Interface is experimental; details may change in the future**
 
 Fetch a specific disk on a bhyve VM.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
@@ -6056,7 +6056,7 @@ size      | Number   | Size in MiB
 boot      | Boolean  | If this is the VM's boot disk
 state     | String   | Current state of disk
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6064,11 +6064,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id`, or `:disk_id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton cloudapi /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9
 
-### Example Request
+#### Example Request
 
     GET /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9 HTTP/1.1
     Authorization: ...
@@ -6078,7 +6078,7 @@ ResourceNotFound | If `:login`, `:id`, or `:disk_id` does not exist
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~9
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: *
@@ -6102,17 +6102,17 @@ ResourceNotFound | If `:login`, `:id`, or `:disk_id` does not exist
     }
 
 
-## ListMachineDisks (GET /:login/machines/:id/disks)
+### ListMachineDisks (GET /:login/machines/:id/disks)
 
 **Interface is experimental; details may change in the future**
 
 List all disk on a bhyve VM.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
@@ -6122,7 +6122,7 @@ size      | Number   | Size in MiB
 boot      | Boolean  | If this is the VM's boot disk
 state     | String   | Current state of disk
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6130,11 +6130,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton cloudapi /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks
 
-### Example Request
+#### Example Request
 
     GET /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks HTTP/1.1
     Authorization: ...
@@ -6144,7 +6144,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~9
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: *
@@ -6177,7 +6177,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     ]
 
 
-## DeleteMachineDisk (DELETE /:login/machines/:id/disks/:disk_id)
+### DeleteMachineDisk (DELETE /:login/machines/:id/disks/:disk_id)
 
 **Interface is experimental; details may change in the future**
 
@@ -6186,15 +6186,15 @@ Asynchronously delete a disk off a bhyve VM.
 Since this is an asynchronous operation, deletion may take several seconds.
 You can check the disk's state using [GetMachineDisk](#GetMachineDisk).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6202,11 +6202,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:disk_id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton cloudapi /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9 -X DELETE
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/disks/21f04764-1db8-47dc-acfd-2215f2b842e9 HTTP/1.1
     Authorization: ...
@@ -6216,7 +6216,7 @@ ResourceNotFound | If `:login`, `:id` or `:disk_id` does not exist
     Content-Type: application/x-www-form-urlencoded
     Api-Version: ~9
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -6229,7 +6229,7 @@ ResourceNotFound | If `:login`, `:id` or `:disk_id` does not exist
     Response-Time: 754
 
 
-## UpdateMachineMetadata (POST /:login/machines/:id/metadata)
+### UpdateMachineMetadata (POST /:login/machines/:id/metadata)
 
 Allows you to update the metadata for a given instance.  Note that updating the
 metadata via CloudAPI will result in the metadata being updated in the running
@@ -6239,13 +6239,13 @@ The semantics of this call are subtly different that the AddMachineTags call --
 any metadata keys passed in here are created if they do not exist, and
 overwritten if they do.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 $key      | String   | You can assign any number of metadata keys in this call; the string can be either a plain string, or a JSON-encoded object
 
-### Returns
+#### Returns
 
 Returns the current set of tags.
 
@@ -6253,7 +6253,7 @@ Returns the current set of tags.
 --------- | -------- | ---------------
 $key      | Object   | Your value(s)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6261,11 +6261,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-updatemachinemetadata -m foo=bar -m group=test cf055959-d776-482e-bd71-ca510a04bdd7
 
-### Example Request
+#### Example Request
 
     POST /my/machines/cf055959-d776-482e-bd71-ca510a04bdd7/metadata HTTP/1.1
     Authorization: ...
@@ -6277,7 +6277,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
 
     foo=bar&group=test
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 Ok
     Access-Control-Allow-Origin: *
@@ -6298,17 +6298,17 @@ ResourceNotFound | If `:login` or `:id` does not exist
     }
 
 
-## ListMachineMetadata (GET /:login/machines/:id/metadata)
+### ListMachineMetadata (GET /:login/machines/:id/metadata)
 
 Returns the complete set of metadata associated with this instance.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
 credentials | Boolean  | Whether or not to return instance credentials. Defaults to false
 
-### Returns
+#### Returns
 
 Returns the current metadata object
 
@@ -6316,7 +6316,7 @@ Returns the current metadata object
 --------- | -------- | ---------------
 $name     | Object   | Your metadata
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6324,11 +6324,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-listmachinemetadata cf055959-d776-482e-bd71-ca510a04bdd7
 
-### Example Request
+#### Example Request
 
     GET /my/machines/cf055959-d776-482e-bd71-ca510a04bdd7/metadata?credentials=true HTTP/1.1
     Authorization: ...
@@ -6336,7 +6336,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 Ok
     Access-Control-Allow-Origin: *
@@ -6361,21 +6361,21 @@ ResourceNotFound | If `:login` or `:id` does not exist
     }
 
 
-## GetMachineMetadata (GET /:login/machines/:id/metadata/:key)
+### GetMachineMetadata (GET /:login/machines/:id/metadata/:key)
 
 Returns a single metadata entry associated with this instance.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 key       | String   | Name of metadata value to retrieve
 
-### Returns
+#### Returns
 
 Returns metadata value as string.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6383,11 +6383,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:key` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-getmachinemetadata --metadataId=foo cf055959-d776-482e-bd71-ca510a04bdd7
 
-### Example Request
+#### Example Request
 
     GET /my/machines/cf055959-d776-482e-bd71-ca510a04bdd7/metadata/foo HTTP/1.1
     Authorization: ...
@@ -6395,7 +6395,7 @@ ResourceNotFound | If `:login`, `:id` or `:key` does not exist
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 Ok
     Access-Control-Allow-Origin: *
@@ -6413,19 +6413,19 @@ ResourceNotFound | If `:login`, `:id` or `:key` does not exist
     bar
 
 
-## DeleteMachineMetadata (DELETE /:login/machines/:id/metadata/:key)
+### DeleteMachineMetadata (DELETE /:login/machines/:id/metadata/:key)
 
 Deletes a single metadata key from this instance.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6433,11 +6433,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:key` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-deletemachinemetadata --metadata=foo cf055959-d776-482e-bd71-ca510a04bdd7
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/cf055959-d776-482e-bd71-ca510a04bdd7/metadata/foo HTTP/1.1
     Authorization: ...
@@ -6445,7 +6445,7 @@ ResourceNotFound | If `:login`, `:id` or `:key` does not exist
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -6460,19 +6460,19 @@ ResourceNotFound | If `:login`, `:id` or `:key` does not exist
     Content-MD5: qKVbfrhXVqh7Oni6Pub9Pw==
     Content-Length: 0
 
-## DeleteAllMachineMetadata (DELETE /:login/machines/:id/metadata)
+### DeleteAllMachineMetadata (DELETE /:login/machines/:id/metadata)
 
 Deletes all metadata keys from this instance.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6480,14 +6480,14 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-deletemachinemetadata --metadata='*' cf055959-d776-482e-bd71-ca510a04bdd7
 
 If you're running in a Unix-like environment, you may need to quote the wildcard
 to keep the shell from matching files in the current directory.
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/cf055959-d776-482e-bd71-ca510a04bdd7/metadata HTTP/1.1
     Authorization: ...
@@ -6495,7 +6495,7 @@ to keep the shell from matching files in the current directory.
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -6511,7 +6511,7 @@ to keep the shell from matching files in the current directory.
     Content-Length: 0
 
 
-## AddMachineTags (POST /:login/machines/:id/tags)
+### AddMachineTags (POST /:login/machines/:id/tags)
 
 Set tags on the given instance. A pre-existing tag with the same name as one
 given will be overwritten.
@@ -6520,17 +6520,17 @@ Note: This action is asynchronous. You can poll on `ListMachineTags` to wait for
 the update to be complete (the `triton instance tag set -w,--wait` option does
 this).
 
-### Inputs
+#### Inputs
 
 Tag name/value pairs. Input data is typically as a application/json POST body.
 However, query params or `application/x-www-form-urlencoded`-encoded body also
 works. Tag values may be strings, numbers or booleans.
 
-### Returns
+#### Returns
 
 Returns the resultant set of tags as a JSON object.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6538,7 +6538,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6548,7 +6548,7 @@ Using node-smartdc:
 
     $ sdc-addmachinetags --tag='foo=bar' --tag='group=test' 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/tags HTTP/1.1
     Host: us-east-3b.api.joyent.com
@@ -6561,7 +6561,7 @@ Using node-smartdc:
 
     {"foo":"bar","group":"test"}
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     server: Joyent Triton 8.0.0
@@ -6575,7 +6575,7 @@ Using node-smartdc:
     {"foo":"bar","group":"test","preexiting":"blah"}
 
 
-## ReplaceMachineTags (PUT /:login/machines/:id/tags)
+### ReplaceMachineTags (PUT /:login/machines/:id/tags)
 
 Fully replace all tags on an instance with the given tags.
 
@@ -6583,17 +6583,17 @@ Note: This action is asynchronous. You can poll on `ListMachineTags` to wait for
 the update to be complete (the `triton instance tag replace-all -w,--wait`
 option does this).
 
-### Inputs
+#### Inputs
 
 Input data is typically as a application/json POST body. However, query params
 or `application/x-www-form-urlencoded`-encoded body also works. Tag values
 may be strings, numbers or booleans.
 
-### Returns
+#### Returns
 
 Returns the resultant set of tags as a JSON object.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6601,7 +6601,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6611,7 +6611,7 @@ Using node-smartdc:
 
     $ sdc-replacemachinetags --tag='foo=bar' --tag='group=test' 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     POST /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/tags HTTP/1.1
     Host: us-east-3b.api.joyent.com
@@ -6624,7 +6624,7 @@ Using node-smartdc:
 
     {"foo":"bar","group":"test"}
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     server: Joyent Triton 8.0.0
@@ -6638,19 +6638,19 @@ Using node-smartdc:
     {"foo":"bar","group":"test"}
 
 
-## ListMachineTags (GET /:login/machines/:id/tags)
+### ListMachineTags (GET /:login/machines/:id/tags)
 
 Returns the complete set of tags associated with this instance.
 
-### Inputs
+#### Inputs
 
 None.
 
-### Returns
+#### Returns
 
 Returns the current set of tags as a JSON object.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6658,7 +6658,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6677,7 +6677,7 @@ Using node-smartdc:
 
     $ sdc-listmachinetags 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     GET /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/tags HTTP/1.1
     Host: api.example.com
@@ -6685,7 +6685,7 @@ Using node-smartdc:
     accept: application/json
     accept-version: ~8||~7
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     server: Joyent Triton 8.0.0
@@ -6699,7 +6699,7 @@ Using node-smartdc:
     {"foo":"bar","group":"test"}
 
 
-## GetMachineTag (GET /:login/machines/:id/tags/:tag)
+### GetMachineTag (GET /:login/machines/:id/tags/:tag)
 
 Returns the value for a single tag on this instance.
 
@@ -6707,15 +6707,15 @@ Typically one calls CloudAPI endpoints with `Accept: application/json`. This
 endpoint can be called that way, or alternatively with `Accept: text/plain`
 to get the non-JSON value in the response.
 
-### Inputs
+#### Inputs
 
 None.
 
-### Returns
+#### Returns
 
 The tag value.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6723,7 +6723,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:tag` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6737,7 +6737,7 @@ Using node-smartdc:
     $ sdc-getmachinetag --tag=foo 5e42cd1e-34bb-402f-8796-bf5a2cae47db
     bar
 
-### Example Request/Response
+#### Example Request/Response
 
 Using `application/json`, the request:
 
@@ -6774,7 +6774,7 @@ the response:
     bar
 
 
-## DeleteMachineTag (DELETE /:login/machines/:id/tags/:tag)
+### DeleteMachineTag (DELETE /:login/machines/:id/tags/:tag)
 
 Deletes a single tag from this instance.
 
@@ -6782,15 +6782,15 @@ Note: This action is asynchronous. You can poll on `ListMachineTags` to wait for
 the update to be complete (the `triton instance tag delete -w,--wait` option
 does this).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6798,7 +6798,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id` or `:tag` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6808,7 +6808,7 @@ Using node-smartdc:
 
     $ sdc-deletemachinetag --tag=foo 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/tags/foo HTTP/1.1
     Host: api.example.com
@@ -6816,13 +6816,13 @@ Using node-smartdc:
     accept: text/plain
     accept-version: ~8||~7
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     ...
 
 
-## DeleteMachineTags (DELETE /:login/machines/:id/tags)
+### DeleteMachineTags (DELETE /:login/machines/:id/tags)
 
 Deletes all tags from an instance.
 
@@ -6830,15 +6830,15 @@ Note: This action is asynchronous. You can poll on `ListMachineTags` to wait for
 the update to be complete (the `triton instance tag delete -w,--wait` option
 does this).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6846,7 +6846,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
 Using node-triton:
 
@@ -6857,7 +6857,7 @@ Using node-smartdc:
     # Remember to quote the `*` to avoid shell expansion.
     $ sdc-deletemachinetag --tag='*' 5e42cd1e-34bb-402f-8796-bf5a2cae47db
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/5e42cd1e-34bb-402f-8796-bf5a2cae47db/tags HTTP/1.1
     Host: api.example.com
@@ -6865,28 +6865,28 @@ Using node-smartdc:
     accept: text/plain
     accept-version: ~8||~7
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 204 No Content
     ...
 
 
-## DeleteMachine (DELETE /:login/machines/:id)
+### DeleteMachine (DELETE /:login/machines/:id)
 
 Allows you to completely destroy an instance.
 
 An instance cannot be destroyed so long as [Deletion
 Protection](#deletion-protection) is enabled on that instance.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6896,7 +6896,7 @@ ResourceNotFound     | If `:login` or `:id` does not exist
 InvalidState         | The instance is in the wrong state to be deleted
 CannotDestroyMachine | [Deletion Protection](#deletion-protection) is enabled on this instance
 
-### CLI Command
+#### CLI Command
 
     $ triton instance delete 75cfe125-a5ce-49e8-82ac-09aa31ffdf26
 
@@ -6904,7 +6904,7 @@ or
 
     $ sdc-deletemachine 75cfe125-a5ce-49e8-82ac-09aa31ffdf26
 
-### Example Request
+#### Example Request
 
     DELETE /my/machines/75cfe125-a5ce-49e8-82ac-09aa31ffdf26 HTTP/1.1
     Authorization: ...
@@ -6912,7 +6912,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Access-Control-Allow-Origin: *
@@ -6926,7 +6926,7 @@ or
     Content-Length: 0
 
 
-## MachineAudit (GET /:login/machines/:id/audit)
+### MachineAudit (GET /:login/machines/:id/audit)
 
 Provides a list of an instance's accomplished actions. Results are sorted from
 newest to oldest action.
@@ -6934,11 +6934,11 @@ newest to oldest action.
 Note that the complete audit trail is returned only if the instance history and
 job records have not been purged from Triton.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * An array of action objects, which contain:
 
@@ -6959,7 +6959,7 @@ user      | String   | When the authentication type is "basic", this member will
 ip        | String   | The IP addresses this from which the action was requested. Not present if type is "operator"
 keyId     | String   | When authentication type is either "signature" or "token", SSH key identifier
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -6967,7 +6967,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton instance audit 75cfe125-a5ce-49e8-82ac-09aa31ffdf26
 
@@ -6975,7 +6975,7 @@ or
 
     $ sdc-getmachineaudit 75cfe125-a5ce-49e8-82ac-09aa31ffdf26
 
-### Example Request
+#### Example Request
 
     GET /my/machines/75cfe125-a5ce-49e8-82ac-09aa31ffdf26/audit HTTP/1.1
     Authorization: ...
@@ -6983,7 +6983,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7012,7 +7012,7 @@ or
       }, ...]
 
 
-## Deletion Protection
+### Deletion Protection
 
 If you want to decrease the risk of accidental instance destruction, it is
 possible to make instance destruction (e.g. through
@@ -7030,7 +7030,7 @@ all other operations will still work. To destroy the instance, first call
 [DisableMachineDeletionProtection](#DisableMachineDeletionProtection)) on the
 instance.
 
-### CLI Commands
+#### CLI Commands
 
     $ triton instance create 62aaa296 0ea54d9d --deletion-protection
 
@@ -7039,7 +7039,7 @@ instance.
     $ triton instance enable-deletion-protection 9985bc81
 
 
-# Migrations
+## Migrations
 
 Triton supports *incremental offline migrations* starting with CloudAPI version 9.6.0.
 
@@ -7057,16 +7057,16 @@ these phases can each be run manually (_on demand_ migration).
 For any migration action (e.g. `begin`, `sync`, `switch` or `abort`) you can use the
 migration `watch` endpoint to show progress information for the running migration action
 
-## Migrate  (POST /:login/machines/:id/migrate)
+### Migrate  (POST /:login/machines/:id/migrate)
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 action    | String   | One of "begin", "sync", "switch", "automatic", "pause", "abort" or "watch".
 affinity  | Array    | Optional array of [affinity rules](#affinity-rules). Only apply when actions are "begin" or "automatic".
 
-### Returns
+#### Returns
 
 **Field**            | **Type** | **Description**
 -------------------- | -------- | ---------------
@@ -7080,7 +7080,7 @@ error                | String   | If a migration fails - this is the error messa
 
 If the action is `watch` the response will return instead a collection of [Progress Events](#progress-Events).
 
-### Progress Events
+#### Progress Events
 
 Progress events are sent when something important occurs during the migration.
 There are actually two styles of progress events - one for major events (and/or warnings) and one to show the sync progress (`bandwidth` and `eta`).
@@ -7099,7 +7099,7 @@ duration\_ms             | Number (optional)  | The number of milliseconds the p
 eta\_ms                  | Number (optional)  | Estimate of the number of milliseconds until the task is completed.
 transfer\_bytes\_second  | Number (optional)  | The number of bytes being sent per second between the source and target instances during the "sync" phase.
 
-### Migration state
+#### Migration state
 
 The state the migration operation is currently in. It can be one of
 the following states:
@@ -7112,7 +7112,7 @@ aborted       | User or operator aborted the migration attempt.
 failed        | Migration operation could not complete, see "error".
 successful    | Migration was successfully completed.
 
-### Migration phases
+#### Migration phases
 
 The workflow stage that the migration is currently running, one of:
 
@@ -7123,7 +7123,7 @@ sync       | This phase synchronizes the zfs datasets of the source instance wit
 switch     | This phase stops the instance from running, synchronizes the zfs datasets of the source instance with the zfs datasets in the target instance, moves the NICs from the source to the target instance, moves control to the target instance and then restarts the target instance.
 abort      | This phase is used when aborting a migration.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7134,7 +7134,7 @@ InvalidState     | The migration is in the wrong `state` to perform the requeste
 InvalidArgument  | If `action` was invalid, or `affinity` wasn't valid
 MissingParameter | If `action` wasn't provided
 
-### CLI Commands
+#### CLI Commands
 
     $ triton instance migration begin eaabc951 -w
     running: 1% reserving instance
@@ -7164,7 +7164,7 @@ MissingParameter | If `action` wasn't provided
     SHORTID   PHASE   STATE       AGE
     eaabc951  switch  successful  26m
 
-### Example Request
+#### Example Request
 
     POST /my/machines/eaabc951-7b16-421f-ff2b-ba67b12bb4bd/migrate HTTP/1.1
     Host: api.example.com
@@ -7178,7 +7178,7 @@ MissingParameter | If `action` wasn't provided
 
     {"action": "begin"}
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 201 Created
     content-type: application/json
@@ -7204,7 +7204,7 @@ MissingParameter | If `action` wasn't provided
       "progress_history":[]
     }
 
-### Example watch Request
+#### Example watch Request
 
     POST /my/machines/eaabc951-7b16-421f-ff2b-ba67b12bb4bd/migrate?action=watch HTTP/1.1
     Host: api.example.com
@@ -7215,7 +7215,7 @@ MissingParameter | If `action` wasn't provided
     user-agent: triton/7.0.1 (x64-darwin; node/6.10.3)
     accept-version: ~9||~8
 
-### Example watch Response
+#### Example watch Response
 
     HTTP/1.1 200 OK
     access-control-allow-origin: *
@@ -7237,27 +7237,27 @@ MissingParameter | If `action` wasn't provided
 
     {"type":"end","phase":"begin","state":"paused"}
 
-## ListMigrations  (GET /:login/migrations)
+### ListMigrations  (GET /:login/migrations)
 
 Retrieve a list of migrations
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 A list of migration objects. See [Migrate](#Migrate).
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
-### CLI example
+#### CLI example
 
     $ triton inst migration list
 
-### Example Request
+#### Example Request
 
     GET /my/migrations HTTP/1.1
     Host: api.example.com
@@ -7267,7 +7267,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
     user-agent: triton/7.0.1 (x64-darwin; node/6.10.3)
     accept-version: ~9||~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7356,13 +7356,13 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
       ... more migration objects ...
     ]
 
-## GetMigration  (GET /:login/migrations/:id)
+### GetMigration  (GET /:login/migrations/:id)
 
-### Inputs
+#### Inputs
 
 None
 
-### Returns
+#### Returns
 
 Migration object with the following fields:
 
@@ -7377,15 +7377,15 @@ state                | String   | Current migration state. See migration state b
 progress\_history    | Array    | array of completed JSON progress events. See [Progress Events](#progress-Events) section for details.
 error                | String   | If a migration fails - this is the error message of why it failed.
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
-### CLI example
+#### CLI example
 
     $ triton inst migration get
 
-### Example Request
+#### Example Request
 
     GET /my/migrations/40c3c6ec-8be5-476a-ca35-c0ea2b0858e3 HTTP/1.1
     Host: api.example.com
@@ -7395,7 +7395,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
     user-agent: triton/7.0.1 (x64-darwin; node/6.10.3)
     accept-version: ~9||~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7473,12 +7473,12 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
     }
 
 
-# FirewallRules
+## FirewallRules
 
 You can manage Firewall Rules for your instances through CloudAPI.
 
 
-## Firewall Rule Syntax
+### Firewall Rule Syntax
 
 In general, the firewall rule is composed of the following pieces:
 
@@ -7499,46 +7499,46 @@ for more information.
 The rule should have `tag`, `vm` or `all vms` in the FROM or TO target. The
 following are some possibilities:
 
-### Allow incoming HTTP traffic to an instance:
+#### Allow incoming HTTP traffic to an instance:
 
     FROM any TO vm 0abeae82-c040-4080-ac60-b60d3e3890a7 ALLOW tcp port 80
 
-### Block outgoing SMTP traffic from an instance to a subnet:
+#### Block outgoing SMTP traffic from an instance to a subnet:
 
     FROM vm 0abeae82-c040-4080-ac60-b60d3e3890a7 TO subnet 10.99.99.0/24 BLOCK tcp port 25
 
-### Block incoming TCP traffic from all instances to a certain range of ports:
+#### Block incoming TCP traffic from all instances to a certain range of ports:
 
     FROM any TO vm 0abeae82-c040-4080-ac60-b60d3e3890a7 BLOCK tcp ports 40000 - 65535
 
-### Allow an IP HTTP and HTTPS access to all instances tagged www or testwww:
+#### Allow an IP HTTP and HTTPS access to all instances tagged www or testwww:
 
     FROM ip 10.99.99.7 TO (tag www OR tag testwww) ALLOW tcp (port 80 AND port 443)
 
-### Allow syslog traffic from instances tagged with group=web to instances tagged with group=mon:
+#### Allow syslog traffic from instances tagged with group=web to instances tagged with group=mon:
 
     FROM tag group=www TO tag group=mon ALLOW udp port 514
 
-### Allow traffic from anyone but 10.20.30.0/24 to access an MTA:
+#### Allow traffic from anyone but 10.20.30.0/24 to access an MTA:
 
     FROM any TO tag mta ALLOW tcp PORT 25
     FROM subnet 10.20.30.0/24 TO tag mta BLOCK tcp PORT 25 PRIORITY 1
 
-### Block all outbound traffic, overriding the default outbound policy, except for SSH:
+#### Block all outbound traffic, overriding the default outbound policy, except for SSH:
 
     FROM all vms TO any BLOCK tcp PORT all
     FROM all vms TO any ALLOW tcp PORT 22 PRIORITY 1
 
 
-## ListFirewallRules (GET /:login/fwrules)
+### ListFirewallRules (GET /:login/fwrules)
 
 List all firewall rules for the current account.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of firewall rule objects.  Firewall Rules are:
 
@@ -7550,7 +7550,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7558,7 +7558,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule list
 
@@ -7566,7 +7566,7 @@ or
 
     $ sdc-listfirewallrules
 
-#### Example Request
+###### Example Request
 
     GET /login/fwrules HTTP/1.1
     authorization: Signature keyId="...
@@ -7575,7 +7575,7 @@ or
     host: api.example.com
     connection: keep-alive
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7600,15 +7600,15 @@ or
     ]
 
 
-## GetFirewallRule (GET /:login/fwrules/:id)
+### GetFirewallRule (GET /:login/fwrules/:id)
 
 Retrieves an individual firewall rule.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -7618,7 +7618,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7626,7 +7626,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule get 38de17c4-39e8-48c7-a168-0f58083de860
 
@@ -7634,7 +7634,7 @@ or
 
     $ sdc-getfirewallrule 38de17c4-39e8-48c7-a168-0f58083de860
 
-#### Example Request
+###### Example Request
 
     GET /login/fwrules/38de17c4-39e8-48c7-a168-0f58083de860 HTTP/1.1
     authorization: Signature keyId="...
@@ -7642,7 +7642,7 @@ or
     accept-version: ~8
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7663,12 +7663,12 @@ or
     }
 
 
-## CreateFirewallRule (POST /:login/fwrules)
+### CreateFirewallRule (POST /:login/fwrules)
 
 Adds a new firewall rule for the specified account.  This rule will be added to
 all the account's instances where it may be necessary.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -7676,7 +7676,7 @@ enabled     | Boolean  | Indicates if the rule is enabled (optional, false by de
 rule        | String   | Firewall rule text
 description | String   | Human-readable description for the rule (optional)
 
-### Returns
+#### Returns
 
 Firewall rule object.
 
@@ -7688,7 +7688,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7698,7 +7698,7 @@ InvalidArgument  | If rule is invalid
 MissingParameter | If rule wasn't provided
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule create '...'
 
@@ -7706,7 +7706,7 @@ or
 
     $ sdc-createfirewallrule --rule='...' --enabled=true
 
-#### Example Request
+###### Example Request
 
     POST /login/fwrules HTTP/1.1
     authorization: Signature keyId="...
@@ -7716,7 +7716,7 @@ or
     content-length: 112
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 201 Created
     content-type: application/json
@@ -7737,12 +7737,12 @@ or
     }
 
 
-## UpdateFirewallRule (POST /:login/fwrules/:id)
+### UpdateFirewallRule (POST /:login/fwrules/:id)
 
 Updates the given rule record and -- depending on rule contents --
 adds/removes/updates the rule on all the required instances.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -7750,7 +7750,7 @@ rule        | String   | Firewall rule text (optional)
 description | String   | Human-readable description for the rule (optional)
 enabled     | Boolean  | Indicates if the rule is enabled (optional)
 
-### Returns
+#### Returns
 
 Firewall rule object.
 
@@ -7762,7 +7762,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7772,7 +7772,7 @@ InvalidArgument  | If rule is invalid, or trying to modify a global rule
 MissingParameter | If rule wasn't present
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule update 38de17c4-39e8-48c7-a168-0f58083de860 rule='...'
 
@@ -7780,7 +7780,7 @@ or
 
     $ sdc-updatefirewallrule --rule='...' 38de17c4-39e8-48c7-a168-0f58083de860
 
-#### Example Request
+###### Example Request
 
     POST /login/fwrules/38de17c4-39e8-48c7-a168-0f58083de860 HTTP/1.1
     authorization: Signature keyId="...
@@ -7792,7 +7792,7 @@ or
 
     ...
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7813,15 +7813,15 @@ or
     }
 
 
-## EnableFirewallRule (POST /:login/fwrules/:id/enable)
+### EnableFirewallRule (POST /:login/fwrules/:id/enable)
 
 Enables the given firewall rule if it is disabled.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Firewall rule object.
 
@@ -7833,7 +7833,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7841,7 +7841,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule enable 38de17c4-39e8-48c7-a168-0f58083de860
 
@@ -7849,7 +7849,7 @@ or
 
     $ sdc-enablefirewallrule 38de17c4-39e8-48c7-a168-0f58083de860
 
-#### Example Request
+###### Example Request
 
     POST /login/fwrules/38de17c4-39e8-48c7-a168-0f58083de860/enable HTTP/1.1
     authorization: Signature keyId="...
@@ -7859,7 +7859,7 @@ or
     content-length: 2
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7881,15 +7881,15 @@ or
     }
 
 
-## DisableFirewallRule (POST /:login/fwrules/:id/disable)
+### DisableFirewallRule (POST /:login/fwrules/:id/disable)
 
 Disables the given firewall rule if it is enabled.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Firewall rule object.
 
@@ -7901,7 +7901,7 @@ rule        | String   | Firewall rule text
 global      | Boolean  | Indicates if the rule is global (optional)
 description | String   | Human-readable description for the rule (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7909,7 +7909,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule disable 38de17c4-39e8-48c7-a168-0f58083de860
 
@@ -7917,7 +7917,7 @@ or
 
     $ sdc-disablefirewallrule 38de17c4-39e8-48c7-a168-0f58083de860
 
-#### Example Request
+###### Example Request
 
     POST /login/fwrules/38de17c4-39e8-48c7-a168-0f58083de860/disable HTTP/1.1
     authorization: Signature keyId="...
@@ -7927,7 +7927,7 @@ or
     content-length: 2
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -7949,19 +7949,19 @@ or
     }
 
 
-## DeleteFirewallRule (DELETE /:login/fwrules/:id)
+### DeleteFirewallRule (DELETE /:login/fwrules/:id)
 
 Removes the given firewall rule from all the required instances.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -7969,7 +7969,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule delete 38de17c4-39e8-48c7-a168-0f58083de860
 
@@ -7977,7 +7977,7 @@ or
 
     $ sdc-deletefirewallrule 38de17c4-39e8-48c7-a168-0f58083de860
 
-#### Example Request
+###### Example Request
 
     DELETE /login/fwrules/38de17c4-39e8-48c7-a168-0f58083de860 HTTP/1.1
     authorization: Signature keyId="...
@@ -7985,7 +7985,7 @@ or
     accept-version: ~8
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     access-control-allow-origin: *
@@ -7999,23 +7999,23 @@ or
     response-time: 219
 
 
-## ListMachineFirewallRules (GET /:login/machines/:instance_id/fwrules)
+### ListMachineFirewallRules (GET /:login/machines/:instance_id/fwrules)
 
 This has exactly the same input and output format as
 [List Firewall Rules](#ListFirewallRules), but just for the rules affecting the
 given `:instance_id`.
 
 
-## ListFirewallRuleMachines (GET /:login/fwrules/:id/machines)
+### ListFirewallRuleMachines (GET /:login/fwrules/:id/machines)
 
 Lists all instances a firewall rule is applied to, in the same format as
 [List Machines](#ListMachines).
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of instance objects, which contain:
 
@@ -8041,7 +8041,7 @@ firewall_enabled | Boolean  | Whether firewall rules are enforced on this instan
 compute_node | String  | UUID of the server on which the instance is located
 package     | String   | The id or name of the package used to create this instance
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8050,7 +8050,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login` does not exist
 InvalidArgument  | If one of the input parameters was invalid
 
-### CLI Command
+#### CLI Command
 
     $ triton fwrule instances 38de17c4-39e8-48c7-a168-0f58083de860
 
@@ -8058,7 +8058,7 @@ or
 
     $ sdc-listfirewallrulemachines 38de17c4-39e8-48c7-a168-0f58083de860
 
-### Example Request
+#### Example Request
 
     GET /my/fwrules/38de17c4-39e8-48c7-a168-0f58083de860/machines HTTP/1.1
     Authorization: ...
@@ -8066,7 +8066,7 @@ or
     Accept: application/json
     Api-Version: ~8
 
-### Example Response
+#### Example Response
 
     HTTP/1.1 200 OK
     x-query-limit: 1000
@@ -8119,7 +8119,7 @@ or
 
 
 
-# Fabrics
+## Fabrics
 
 CloudAPI provides a way to create and manipulate a fabric. On the fabric you can
 create VLANs, and then under that create layer three networks.
@@ -8141,13 +8141,13 @@ database network, a web network, and a load balancer network, each on their own
 VLAN.
 
 
-## ListFabricVLANs (GET /:login/fabrics/default/vlans)
+### ListFabricVLANs (GET /:login/fabrics/default/vlans)
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of VLAN objects that exist on the fabric. Each VLAN object has the
 following properties:
@@ -8158,7 +8158,7 @@ name        | String   | A unique name to identify the VLAN
 vlan_id     | Integer  | A number from 0-4095 that indicates the VLAN's id
 description | String   | An optional description of the VLAN
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8166,11 +8166,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric vlan list
 
-#### Example Request
+###### Example Request
 
     GET /login/fabrics/default/vlans HTTP/1.1
     Authorization: Basic ...
@@ -8178,7 +8178,7 @@ ResourceNotFound | If `:login` does not exist
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -8193,11 +8193,11 @@ ResourceNotFound | If `:login` does not exist
     ]
 
 
-## CreateFabricVLAN (POST /:login/fabrics/default/vlans)
+### CreateFabricVLAN (POST /:login/fabrics/default/vlans)
 
 Creates a new VLAN on the fabric.
 
-### Inputs
+#### Inputs
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -8205,7 +8205,7 @@ name        | String   | A unique name to identify the VLAN
 vlan_id     | Integer  | A number from 0-4095 that indicates the VLAN's id
 description | String   | An optional description of the VLAN
 
-### Returns
+#### Returns
 
 A VLAN Object.
 
@@ -8215,7 +8215,7 @@ name        | String   | A unique name to identify the VLAN
 vlan_id     | Integer  | A number from 0-4095 that indicates the VLAN's id
 description | String   | An optional description of the VLAN
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
@@ -8223,11 +8223,11 @@ ResourceNotFound | If `:login` does not exist
 MissingParameter | If you didn't send a required field
 InvalidArgument  | `vlan_id` or `name` are in use, or `vlan_id` is outside the valid range
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric vlan create
 
-#### Example Request
+###### Example Request
 
     POST /login/fabrics/default/vlans HTTP/1.1
     Authorization: Basic ...
@@ -8241,7 +8241,7 @@ InvalidArgument  | `vlan_id` or `name` are in use, or `vlan_id` is outside the v
       "vlan_id": 100
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 201 Created
     Content-Type: application/json
@@ -8255,13 +8255,13 @@ InvalidArgument  | `vlan_id` or `name` are in use, or `vlan_id` is outside the v
     }
 
 
-## GetFabricVLAN (GET /:login/fabrics/default/vlans/:vlan_id)
+### GetFabricVLAN (GET /:login/fabrics/default/vlans/:vlan_id)
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 A VLAN Object.
 
@@ -8271,7 +8271,7 @@ name        | String   | A unique name to identify the VLAN
 vlan_id     | Integer  | A number from 0-4095 that indicates the VLAN's id
 description | String   | An optional description of the VLAN
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8279,11 +8279,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:vlan_id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric vlan get 2
 
-#### Example Request
+###### Example Request
 
     GET /login/fabrics/default/vlans/2 HTTP/1.1
     Authorization: Basic ...
@@ -8291,7 +8291,7 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -8303,11 +8303,11 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
       "vlan_id": 2
     }
 
-## UpdateFabricVLAN (PUT /:login/fabrics/default/vlans/:vlan_id)
+### UpdateFabricVLAN (PUT /:login/fabrics/default/vlans/:vlan_id)
 
 Updates a fabric VLAN.
 
-### Inputs
+#### Inputs
 
 All inputs are optional.
 
@@ -8316,7 +8316,7 @@ All inputs are optional.
 name        | String   | A unique name to identify the VLAN
 description | String   | An optional description of the VLAN
 
-### Returns
+#### Returns
 
 A VLAN Object.
 
@@ -8326,17 +8326,17 @@ name        | String   | A unique name to identify the VLAN
 vlan_id     | Integer  | A number from 0-4095 that indicates the VLAN's id
 description | String   | An optional description of the VLAN
 
-### Errors
+#### Errors
 
 **Error Code**   | **Description**
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:vlan_id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric vlan update 2 --description="new description"
 
-#### Example Request
+###### Example Request
 
     POST /login/fabrics/default/vlans HTTP/1.1
     Authorization: Basic ...
@@ -8348,7 +8348,7 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
       "description": "new description"
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 202 Accepted
     Content-Type: application/json
@@ -8362,20 +8362,20 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
     }
 
 
-## DeleteFabricVLAN (DELETE /:login/fabrics/default/vlans/:vlan_id)
+### DeleteFabricVLAN (DELETE /:login/fabrics/default/vlans/:vlan_id)
 
 Deletes the specified VLAN. Note there must be no networks on that VLAN in order
 for the VLAN to be deleted.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8384,11 +8384,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login` or `:vlan_id` does not exist
 InUseError       | The VLAN currently has active networks on it
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric vlan delete 2
 
-#### Example Request
+###### Example Request
 
     DELETE /login/fabrics/default/vlans/2 HTTP/1.1
     Authorization: Basic ...
@@ -8396,7 +8396,7 @@ InUseError       | The VLAN currently has active networks on it
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Content-Type: application/json
@@ -8404,15 +8404,15 @@ InUseError       | The VLAN currently has active networks on it
     Api-Version: 7.3.0
 
 
-## ListFabricNetworks (GET /:login/fabrics/default/vlans/:vlan_id/networks)
+### ListFabricNetworks (GET /:login/fabrics/default/vlans/:vlan_id/networks)
 
 Lists all of the networks in a fabric on the VLAN specified by `:vlan_id`.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 Returns an array of Network Objects. Each network object has the following
 information:
@@ -8432,7 +8432,7 @@ resolvers    | String   | Resolver IP addresses
 routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean  | Provision internet NAT zone on gateway address
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8440,11 +8440,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:vlan_id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric network list
 
-#### Example Request
+###### Example Request
 
     GET /login/fabrics/default/vlans/2/networks HTTP/1.1
     Authorization: Basic ...
@@ -8452,7 +8452,7 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -8499,9 +8499,9 @@ ResourceNotFound | If `:login` or `:vlan_id` does not exist
     ]
 
 
-## CreateFabricNetwork (POST /:login/fabrics/default/vlans/:vlan_id/networks)
+### CreateFabricNetwork (POST /:login/fabrics/default/vlans/:vlan_id/networks)
 
-### Inputs
+#### Inputs
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
@@ -8515,7 +8515,7 @@ resolvers    | String   | Optional resolver IP addresses
 routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean  | Provision internet NAT zone on gateway address, default is true
 
-### Returns
+#### Returns
 
 Network Object:
 
@@ -8534,7 +8534,7 @@ resolvers    | String   | Resolver IP addresses
 routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean  | Provision internet NAT zone on gateway address
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8542,11 +8542,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric network create --vlan_id=2 --name="newnet" --subnet="10.50.1.0/24" --provision_start_ip="10.50.1.5" --provision_end_ip="10.50.1.20" --resolvers="8.8.8.8" --resolvers="8.8.4.4" --gateway="10.50.1.1" --routes='{"10.25.1.0/21":"10.50.1.2","10.27.1.0/21":"10.50.1.3"}'
 
-#### Example Request
+###### Example Request
 
     POST /login/fabrics/default/vlans/2/networks HTTP/1.1
     Authorization: Basic ...
@@ -8570,7 +8570,7 @@ ResourceNotFound | If `:login` does not exist
       "subnet": "10.50.1.0/24"
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 201 Created
     Content-Type: application/json
@@ -8598,7 +8598,7 @@ ResourceNotFound | If `:login` does not exist
       "vlan_id": 2
     }
 
-#### More Examples
+###### More Examples
 
 Create network with no internet NAT zone
 
@@ -8606,13 +8606,13 @@ Create network with no internet NAT zone
 
 
 
-## GetFabricNetwork (GET /:login/fabrics/default/vlans/:vlan_id/networks/:id)
+### GetFabricNetwork (GET /:login/fabrics/default/vlans/:vlan_id/networks/:id)
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 The details of the network object:
 
@@ -8631,7 +8631,7 @@ resolvers    | String   | Resolver IP addresses
 routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean  | Provision internet NAT zone on gateway address
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8640,11 +8640,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login`, `:vlan_id` or `:id` does not exist
 
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric network get 7fa999c8-0d2c-453e-989c-e897716d0831
 
-#### Example Request
+###### Example Request
 
     GET /login/fabrics/default/vlans/2/networks/7fa999c8-0d2c-453e-989c-e897716d0831 HTTP/1.1
     Authorization: Basic ...
@@ -8652,7 +8652,7 @@ ResourceNotFound | If `:login`, `:vlan_id` or `:id` does not exist
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -8682,9 +8682,9 @@ ResourceNotFound | If `:login`, `:vlan_id` or `:id` does not exist
 
 
 
-## UpdateFabricNetwork (PUT /:login/fabrics/default/vlans/:vlan_id/networks/:id)
+### UpdateFabricNetwork (PUT /:login/fabrics/default/vlans/:vlan_id/networks/:id)
 
-### Inputs
+#### Inputs
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
@@ -8695,7 +8695,7 @@ provision_end_ip  | String | The last IP on the network that may be assigned (op
 resolvers    | String   | Resolver IP addresses (optional)
 routes       | Routes Object| Static routes for hosts on this network (optional)
 
-### Returns
+#### Returns
 
 Network Object:
 
@@ -8714,7 +8714,7 @@ resolvers    | String   | Resolver IP addresses
 routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean  | Provision internet NAT zone on gateway address
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8722,11 +8722,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $sdc-fabric network update 17dbc20a-2782-4e88-90f0-4d4a1bb0501f -n "updatenet" --resolvers="8.8.4.4" --routes='{"172.16.10.1/24":"192.168.128.1"}' --description="updated description"
 
-#### Example Request
+###### Example Request
 
     PUT /login/fabrics/default/vlans/2/networks/17dbc20a-2782-4e88-90f0-4d4a1bb0501f HTTP/1.1
     Authorization: Basic ...
@@ -8745,7 +8745,7 @@ ResourceNotFound | If `:login` does not exist
       }
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 201 Created
     Content-Type: application/json
@@ -8772,20 +8772,20 @@ ResourceNotFound | If `:login` does not exist
       "vlan_id": 2
     }
 
-## DeleteFabricNetwork (DELETE /:login/fabrics/default/vlans/:vlan_id/networks/:id)
+### DeleteFabricNetwork (DELETE /:login/fabrics/default/vlans/:vlan_id/networks/:id)
 
 Deletes the specified Network. Note that no instances may be provisioned on the
 Network.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8794,11 +8794,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login`, `:vlan_id` or `:id` does not exist
 InUseError       | The VLAN currently has active networks on it
 
-### CLI Command
+#### CLI Command
 
     $ sdc-fabric network delete 7fa999c8-0d2c-453e-989c-e897716d0831
 
-#### Example Request
+###### Example Request
 
     DELETE /login/fabrics/default/vlans/2/networks/7fa999c8-0d2c-453e-989c-e897716d0831 HTTP/1.1
     Authorization: Basic ...
@@ -8806,7 +8806,7 @@ InUseError       | The VLAN currently has active networks on it
     Accept: application/json
     Accept-version: ~7.3
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     Content-Type: application/json
@@ -8816,7 +8816,7 @@ InUseError       | The VLAN currently has active networks on it
 
 
 
-# Networks
+## Networks
 
 CloudAPI provides a way to get details on public and customer-specific networks
 in a datacenter. This also includes all of the networks available in your
@@ -8824,16 +8824,16 @@ fabric. Your fabric networks are exclusive to your account. All other networks
 may be usable by other tenants.
 
 
-## ListNetworks (GET /:login/networks)
+### ListNetworks (GET /:login/networks)
 
 List all the networks which can be used by the given account. If a network was
 created on a fabric, then additional information will be shown:
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of network objects.  Networks are:
 
@@ -8865,7 +8865,7 @@ routes       | Routes Object| Optional Static routes for hosts on this network
 internet_nat | Boolean | Provision internet NAT zone on gateway address
 
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8873,7 +8873,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton network list
 
@@ -8881,7 +8881,7 @@ or
 
     $ sdc-listnetworks
 
-#### Example Request
+###### Example Request
 
     GET /my/networks HTTP/1.1
     authorization: Signature keyId="...
@@ -8890,7 +8890,7 @@ or
     host: api.example.com
     connection: keep-alive
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -8915,15 +8915,15 @@ or
     ]
 
 
-## GetNetwork (GET /:login/networks/:id)
+### GetNetwork (GET /:login/networks/:id)
 
 Retrieves information about an individual network.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 **Field**   | **Type** | **Description**
 ----------- | -------- | ---------------
@@ -8932,7 +8932,7 @@ name        | String   | The network name
 public      | Boolean  | Whether this a public or private (rfc1918) network
 description | String   | Description of this network (optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -8940,7 +8940,7 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton network get daeb93a2-532e-4bd4-8788-b6b30f10ac17
 
@@ -8948,7 +8948,7 @@ or
 
     $ sdc-getnetwork daeb93a2-532e-4bd4-8788-b6b30f10ac17
 
-#### Example Request
+###### Example Request
 
     GET /my/networks/daeb93a2-532e-4bd4-8788-b6b30f10ac17 HTTP/1.1
     authorization: Signature keyId="...
@@ -8956,7 +8956,7 @@ or
     accept-version: ~8
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -8977,7 +8977,7 @@ or
     }
 
 
-## ListNetworkIPs (GET /:login/networks/:id/ips)
+### ListNetworkIPs (GET /:login/networks/:id/ips)
 
 List a network's IPs. On a public network only IPs owned by the user will be
 returned.  On a private network all IPs that are either reserved or allocated
@@ -9005,14 +9005,14 @@ will contain the additional headers `x-resource-count` and `x-query-limit`.  If
 `x-resource-count` is less than `x-query-limit`, you're done, otherwise call the
 API again with `offset` set to `offset` + `limit` to fetch additional instances.
 
-### Inputs
+#### Inputs
 
 **Field**    | **Type** | **Description**
 ------------ | -------- | ---------------
 limit        | Number   | Return a max of N IPs; default is 1000 (which is also the maximum allowable result set size)
 offset       | Number   | Get a `limit` number of IPs starting at this `offset`
 
-### Returns
+#### Returns
 
 An array of IP objects.  IPs are:
 
@@ -9024,7 +9024,7 @@ managed    | Boolean    | True if the user cannot modify the IP via UpdateNetwor
 owner_uuid | UUID       | UUID of the owner that the instance is associated with (Optional)
 belongs_to_uuid | UUID  | UUID of the instance the IP is associated with (Optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9032,11 +9032,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login` or `:id` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton network ip list daeb93a2-532e-4bd4-8788-b6b30f10ac17
 
-#### Example Request
+###### Example Request
 
     GET /my/networks/daeb93a2-532e-4bd4-8788-b6b30f10ac17/ips HTTP/1.1
     authorization: Signature keyId="...
@@ -9044,7 +9044,7 @@ ResourceNotFound | If `:login` or `:id` does not exist
     accept-version: ~8
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     x-query-limit: 1000
@@ -9088,18 +9088,18 @@ ResourceNotFound | If `:login` or `:id` does not exist
       }
     ]
 
-## GetNetworkIP (GET /:login/networks/:id/ips/:ip_address)
+### GetNetworkIP (GET /:login/networks/:id/ips/:ip_address)
 
 Get a network's IP. On a public network you can only get an IP owned by you. On
 private network you can get an IP owned by any of the network's shared owners,
 however the `belongs_to_uuid` field will be omitted if you do not own the
 instance the IP is assocaited with.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An IP object:
 
@@ -9111,7 +9111,7 @@ managed    | Boolean    | True if the user cannot modify the IP via UpdateNetwor
 owner_uuid | UUID       | UUID of the owner that the instance is associated with (Optional)
 belongs_to_uuid | UUID  | UUID of the instance the IP is associated with (Optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9119,11 +9119,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ---------------- | ---------------
 ResourceNotFound | If `:login`, `:id`, or `:ip_address` does not exist
 
-### CLI Command
+#### CLI Command
 
     $ triton network ip get daeb93a2-532e-4bd4-8788-b6b30f10ac17 192.168.128.5
 
-#### Example Request
+###### Example Request
 
     GET /my/networks/daeb93a2-532e-4bd4-8788-b6b30f10ac17/ips/192.168.128.5 HTTP/1.1
     authorization: Signature keyId="...
@@ -9131,7 +9131,7 @@ ResourceNotFound | If `:login`, `:id`, or `:ip_address` does not exist
     accept-version: ~8
     host: api.example.com
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -9156,7 +9156,7 @@ ResourceNotFound | If `:login`, `:id`, or `:ip_address` does not exist
       "managed": false
     }
 
-## UpdateNetworkIP (PUT /:login/networks/:id/ips/:ip_address)
+### UpdateNetworkIP (PUT /:login/networks/:id/ips/:ip_address)
 
 Update a network's IP to toggle the `reserved` flag. If `reserved` is set to
 `true` the IP will not be given out automatically at provision time. You cannot
@@ -9164,13 +9164,13 @@ update an IP on a public network. On private networks you can update an IP that
 is already in use by an instance owned by you, or an IP that is not yet in use
 as long as it's within the network's subnet.
 
-### Inputs
+#### Inputs
 
 **Field**  | **Type** | **Description**
 ---------- | -------- | ---------------
 reserved   | boolean  | If true take the IP out of the provisioning pool
 
-### Returns
+#### Returns
 
 An IP object:
 
@@ -9182,7 +9182,7 @@ managed    | Boolean    | True if the user cannot modify the IP via UpdateNetwor
 owner_uuid | UUID       | UUID of the owner that the instance is associated with (Optional)
 belongs_to_uuid | UUID  | UUID of the instance the IP is associated with (Optional)
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9192,11 +9192,11 @@ ResourceNotFound | If `:login`, `:id`, or `:ip_address` does not exist
 InvalidArgument  | If `:id` is not a UUID, or it is a public network. If `:ip_address` is in use by another user
 MissingParameter | If the `reserved` argument isn't specefied
 
-### CLI Command
+#### CLI Command
 
     $ triton network ip update daeb93a2-532e-4bd4-8788-b6b30f10ac17 192.168.128.5 reserved=false
 
-#### Example Request
+###### Example Request
 
     PUT  /my/networks/daeb93a2-532e-4bd4-8788-b6b30f10ac17/ips/192.168.128.5 HTTP/1.1
     authorization: Signature keyId="...
@@ -9208,7 +9208,7 @@ MissingParameter | If the `reserved` argument isn't specefied
       "reserved": false
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -9231,19 +9231,19 @@ MissingParameter | If the `reserved` argument isn't specefied
       "managed": false
     }
 
-# Nics
+## Nics
 
 CloudAPI provides a way to list, add and remove NICs attached to a instance.
 
-## ListNics (GET /:login/machines/:id/nics)
+### ListNics (GET /:login/machines/:id/nics)
 
 List all the NICs on an instance belonging to a given account.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 An array of NIC objects. NICs are:
 
@@ -9257,7 +9257,7 @@ gateway   | String   | IPv4 gateway
 state     | String   | Describes the state of the NIC (e.g. provisioning, running, or stopped)
 network   | UUID     | The NIC's network id (see [ListNetworks](#ListNetworks))
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9266,11 +9266,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login or `:id` does not exist
 InvalidArgument  | If `:id` isn't a UUID
 
-### CLI Command
+#### CLI Command
 
     $ sdc-nics list 76a533e9-aa3c-4fd4-a194-03fa05663e0e
 
-#### Example Request
+###### Example Request
 
     GET /my/machine/76a533e9-aa3c-4fd4-a194-03fa05663e0e/nics HTTP/1.1
     authorization: Signature keyId="...
@@ -9279,7 +9279,7 @@ InvalidArgument  | If `:id` isn't a UUID
     host: api.example.com
     connection: keep-alive
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -9310,18 +9310,18 @@ InvalidArgument  | If `:id` isn't a UUID
     ]
 
 
-## GetNic (GET /:login/machines/:id/nics/:mac)
+### GetNic (GET /:login/machines/:id/nics/:mac)
 
 Gets a specific NIC on an instance belonging to a given account.
 
 NB: the `:mac` element in the path must have all the colons (':') stripped from
 it in the request.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 A NIC object:
 
@@ -9335,7 +9335,7 @@ gateway   | String   | IPv4 gateway
 state     | String   | Describes the state of the NIC (e.g. provisioning, running, or stopped)
 network   | UUID     | The NIC's network id (see [ListNetworks](#ListNetworks))
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9344,11 +9344,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login`, `:id`, or `:mac` does not exist
 InvalidArgument  | If `:id` isn't a UUID, or `:mac` isn't a MAC address (without colons)
 
-### CLI Command
+#### CLI Command
 
     $ sdc-nics get 90:b8:d0:2f:b8:f9 76a533e9-aa3c-4fd4-a194-03fa05663e0e
 
-#### Example Request
+###### Example Request
 
     GET /my/machine/76a533e9-aa3c-4fd4-a194-03fa05663e0e/nics/90b8d02fb8f9 HTTP/1.1
     authorization: Signature keyId="...
@@ -9357,7 +9357,7 @@ InvalidArgument  | If `:id` isn't a UUID, or `:mac` isn't a MAC address (without
     host: api.example.com
     connection: keep-alive
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 200 OK
     content-type: application/json
@@ -9386,19 +9386,19 @@ InvalidArgument  | If `:id` isn't a UUID, or `:mac` isn't a MAC address (without
     }
 
 
-## AddNic (POST /:login/machines/:id/nics)
+### AddNic (POST /:login/machines/:id/nics)
 
 Creates a new NIC on an instance belonging to a given account.
 
 *WARNING*: this causes the instance to reboot while adding the NIC.
 
-### Inputs
+#### Inputs
 
 **Field** | **Type** | **Description**
 --------- | -------- | ---------------
 network   | Object or String   | [Network object](#network-objects) or network UUID string.
 
-### Returns
+#### Returns
 
 The newly-created NIC object:
 
@@ -9433,7 +9433,7 @@ removed and GetNic will start returning 404.
 
 
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9443,11 +9443,11 @@ ResourceNotFound | If `:login` or `:id` does not exist
 InvalidArgument  | If `:id` isn't a UUID, or the `network` argument isn't a valid UUID
 MissingParameter | If the `network` argument isn't present
 
-### CLI Command
+#### CLI Command
 
     $ sdc-nics create 7007b198-f6aa-48f0-9843-78a3149de3d7 76a533e9-aa3c-4fd4-a194-03fa05663e0e
 
-#### Example Request
+###### Example Request
 
     POST /my/machine/76a533e9-aa3c-4fd4-a194-03fa05663e0e/nics HTTP/1.1
     authorization: Signature keyId="...
@@ -9460,7 +9460,7 @@ MissingParameter | If the `network` argument isn't present
         "network": "7007b198-f6aa-48f0-9843-78a3149de3d7"
     }
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 201 Created
     content-type: application/json
@@ -9489,7 +9489,7 @@ MissingParameter | If the `network` argument isn't present
     }
 
 
-## RemoveNic (DELETE /:login/machines/:id/nics/:mac)
+### RemoveNic (DELETE /:login/machines/:id/nics/:mac)
 
 Removes a NIC on an instance belonging to a given account.
 
@@ -9499,15 +9499,15 @@ CloudAPI.
 
 *WARNING*: this causes the instance to reboot while removing the NIC.
 
-### Inputs
+#### Inputs
 
 * None
 
-### Returns
+#### Returns
 
 * None
 
-### Errors
+#### Errors
 
 For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses).
 
@@ -9516,11 +9516,11 @@ For all possible errors, see [CloudAPI HTTP Responses](#cloudapi-http-responses)
 ResourceNotFound | If `:login`, `:id` or `:mac` does not exist
 InvalidArgument  | If `:id` isn't a UUID
 
-### CLI Command
+#### CLI Command
 
     $ sdc-nics delete 90:b8:d0:2f:b8:f9 76a533e9-aa3c-4fd4-a194-03fa05663e0e
 
-#### Example Request
+###### Example Request
 
     DELETE /my/machine/76a533e9-aa3c-4fd4-a194-03fa05663e0e/nics/90b8d02fb8f9 HTTP/1.1
     authorization: Signature keyId="...
@@ -9529,7 +9529,7 @@ InvalidArgument  | If `:id` isn't a UUID
     host: api.example.com
     connection: keep-alive
 
-#### Example Response
+###### Example Response
 
     HTTP/1.1 204 No Content
     content-type: application/json
@@ -9549,7 +9549,7 @@ InvalidArgument  | If `:id` isn't a UUID
 
 
 
-# Volumes
+## Volumes
 
 _The API endpoints documented in this section are considered experimental. There
 is no guarantee on backward compatibility for them. Breaking changes can and
@@ -9558,7 +9558,7 @@ datacenters for which NFS volumes support has been explicitly enabled. By
 default, it is disabled._
 
 
-## Volume objects
+### Volume objects
 
 Volumes are represented as objects that share a common set of properties:
 
@@ -9592,17 +9592,17 @@ Here's an example of a volume object in JSON format:
 }
 ```
 
-### Naming constraints
+#### Naming constraints
 
-#### Uniqueness
+###### Uniqueness
 
 Volume names need to be _unique per account_.
 
-#### Renaming
+###### Renaming
 
 Renaming a volume is not allowed for volumes that are referenced by active VMs.
 
-### Type-specific properties
+#### Type-specific properties
 
 Different volume types may need to store different properties in addition to the
 properties listed above. For instance, tritonnfs volumes have the following
@@ -9634,7 +9634,7 @@ A `'tritonnfs'` volume can be represented as following:
 }
 ```
 
-### Deletion and usage semantics
+#### Deletion and usage semantics
 
 A volume is considered to be "in use" if its `refs` property is a non-empty
 array. When a container which mounts shared volumes is created and becomes
@@ -9654,12 +9654,12 @@ A shared volume can be deleted if its only users are mounting it using something
 other than Triton APIs (e.g., by using the `mount` command manually from within
 a VM).
 
-### Volumes state machine
+#### Volumes state machine
 
 ![Volumes state FSM](media/img/volumes-state-fsm.png)
 
 
-## ListVolumes (GET /:login/volumes)
+### ListVolumes (GET /:login/volumes)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
@@ -9667,7 +9667,7 @@ volumes support has been explicitly enabled. By default, it is disabled._
 By default (if the request doesn't include the `state` and `predicate`
 parameters), volumes in state === `'failed'` are not included in the response.
 
-### Input
+#### Input
 
 Param       | Type         | Description
 ----------- | ------------ | -----------
@@ -9677,7 +9677,7 @@ size        | String       | Allows filtering volumes by size, e.g `size=10240`
 state       | String       | Allows filtering volumes by state, e.g `state=failed`
 type        | String       | Allows filtering volumes by type, e.g `tritonnfs`
 
-#### Searching by name
+###### Searching by name
 
 `name` is a string containing either a full volume name, or a partial volume
 name prefixed and/or suffixed with a `*` character. For example:
@@ -9694,7 +9694,7 @@ are all valid `name=` searches which will match respectively:
  * any name that ends with `foo` such as `barfoo`
  * any name that contains `foo` such as `barfoobar`
 
-#### Searching by predicate
+###### Searching by predicate
 
 The `predicate` parameter is a JSON string that can be used to build an LDAP
 filter to search on the following indexed properties:
@@ -9710,7 +9710,7 @@ the predicate and the non-predicate query parameters. For example, if a
 predicate includes the `name` field, passing the `name=` query parameter is an
 error.
 
-### Output
+#### Output
 
 A list of volume objects of the following form:
 
@@ -9734,12 +9734,12 @@ A list of volume objects of the following form:
 ```
 
 
-## CreateVolume (POST /:login/volumes)
+### CreateVolume (POST /:login/volumes)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
 
-### Input
+#### Input
 
 Param       | Type         | Mandatory | Description
 ----------- | ------------ |-----------|--------------------------------------
@@ -9748,7 +9748,7 @@ size        | Number       | No        | The desired minimum storage capacity fo
 type        | String       | Yes       | The type of volume. Currently only `'tritonnfs'` is supported
 networks    | Array        | Yes       | A list of UUIDs representing networks on which the volume is reachable. These networks must be fabric networks owned by the user sending the request
 
-### Output
+#### Output
 
 A [volume object](#volume-objects) representing the volume being created. When
 the response is sent, the volume and all its resources are not yet created and
@@ -9759,7 +9759,7 @@ its state is `creating`. Users need to poll the newly-created volume with the
 If the creation process fails, the volume object has its state set to `failed`.
 
 
-## GetVolume (GET /:login/volumes/:id)
+### GetVolume (GET /:login/volumes/:id)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
@@ -9767,23 +9767,23 @@ volumes support has been explicitly enabled. By default, it is disabled._
 GetVolume can be used to get data from an already-created volume, or to
 determine when a volume being created is ready to be used.
 
-### Input
+#### Input
 
 Param         | Type         | Description
 ------------- | ------------ | -----------------------------
 id            | String       | The UUID of the volume object
 
-### Output
+#### Output
 
 A [volume object](#volume-objects) representing the volume with UUID `id`.
 
 
-## DeleteVolume (DELETE /:login/volumes/:id)
+### DeleteVolume (DELETE /:login/volumes/:id)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
 
-### Input
+#### Input
 
 Param       | Type      | Description
 ----------- | --------- | -----------------------------
@@ -9794,7 +9794,7 @@ allowed if it has at least one "active user". See the section
 ["Deletion and usage semantics"](#deletion-and-usage-semantics) for more
 information.
 
-### Output
+#### Output
 
 The output is empty and the status code is 204 if the deletion was scheduled
 successfully.
@@ -9807,7 +9807,7 @@ If resources are using the volume to be deleted, the request results in a
 `VolumeInUse` error.
 
 
-## UpdateVolume (POST /:login/volumes/:id)
+### UpdateVolume (POST /:login/volumes/:id)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
@@ -9818,7 +9818,7 @@ shared volume:
 * `name`, to rename a volume. See [the section on renaming volumes](#renaming)
   for further details.
 
-### Input
+#### Input
 
 Param | Type   | Description
 ----- | -------| ----------------------------------------
@@ -9829,13 +9829,13 @@ Sending any other input parameter will result in an error. Updating other
 properties of a volume, such as the networks it's attached to, must be performed
 by using other separate endpoints.
 
-### Output
+#### Output
 
 The output is empty and the status code is 204 if the volume was successfully
 updated.
 
 
-## ListVolumeSizes (GET /:login/volumesizes)
+### ListVolumeSizes (GET /:login/volumesizes)
 
 _Available only for CloudAPI services running in datacenters for which NFS
 volumes support has been explicitly enabled. By default, it is disabled._
@@ -9843,7 +9843,7 @@ volumes support has been explicitly enabled. By default, it is disabled._
 The `ListVolumeSizes` endpoint can be used to determine in what sizes volumes of
 a certain type are available.
 
-### Input
+#### Input
 
 Param    | Type         | Description
 -------- | ------------ | --------------------------------
@@ -9851,7 +9851,7 @@ type     | String       | the type of the volume (e.g `tritonnfs`)
 
 Sending any other input parameter will result in an error.
 
-### Output
+#### Output
 
 The response is an array of objects having two properties:
 
@@ -9940,9 +9940,9 @@ The response is an array of objects having two properties:
 ]
 ```
 
-# Appendix A: Machine States
+## Appendix A: Machine States
 
-## Machine State Diagram
+### Machine State Diagram
 
 The following is the state diagram for a instance:
 
@@ -9978,7 +9978,7 @@ At any point the state can also be `offline`, like if there is a network or
 power event to the instance.
 
 
-## Polling instance state
+### Polling instance state
 
 As suggested in [CreateMachine](#CreateMachine), you can poll an instance's
 state to check when that instance's provisioning has either successfully
@@ -10034,7 +10034,7 @@ doing:
     });
 
 
-## Polling instance audit
+### Polling instance audit
 
 There are some cases where polling for instance state change will not work
 because there won't be a state change for the requested action (e.g. "rename"),
@@ -10099,7 +10099,7 @@ doing:
     });
 
 
-# Appendix B: HTTP Signature Authentication
+## Appendix B: HTTP Signature Authentication
 
 In addition to HTTP Basic Authentication, CloudAPI supports a new mechanism for
 authenticating HTTP requests based on signing with your SSH private key.
@@ -10112,7 +10112,7 @@ A node.js library for HTTP Signature is available with:
     $ npm install http-signature@0.9.11
 
 
-## CloudAPI Specific Parameters
+### CloudAPI Specific Parameters
 
 The `Signature` authentication scheme is based on the model that the client must
 authenticate itself with a digital signature produced by the private key
@@ -10139,7 +10139,7 @@ with Basic authentication.  In short, you **MUST** use the login name associated
 to your account to specify the `keyId`.
 
 
-## Sample Code
+### Sample Code
 
 Sample code for generating the `Authorization` header (and `Date` header):
 
@@ -10231,7 +10231,7 @@ Sample code for generating the `Authorization` header (and `Date` header):
 
 
 
-# Appendix C: CloudAPI CLI Commands
+## Appendix C: CloudAPI CLI Commands
 
 **`smartdc` Command** | **`triton` Command** | **Description**
 ------------------- | ------------------ | ---------------
